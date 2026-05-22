@@ -33,11 +33,12 @@ public class AdminDashboard extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnList = new javax.swing.JButton();
         btnListTable = new javax.swing.JComboBox<>();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         txtSearchQuery = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
         btnAccessRecord = new javax.swing.JButton();
+        btnReport = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ADMIN DASHBOARD");
@@ -57,10 +58,27 @@ public class AdminDashboard extends javax.swing.JFrame {
         btnList.setBackground(new java.awt.Color(204, 204, 255));
         btnList.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnList.setText("LIST");
-        btnList.setToolTipText("ADD");
+        btnList.setToolTipText("LIST ALL");
 
         btnListTable.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnListTable.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ADMINS", "TEACHERS", "STUDENTS", "SUBJECTS", " " }));
+
+        txtSearchQuery.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        btnSearch.setBackground(new java.awt.Color(153, 255, 204));
+        btnSearch.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSearch.setText("SEARCH");
+        btnSearch.setToolTipText("SEARCH");
+
+        btnAccessRecord.setBackground(new java.awt.Color(255, 102, 0));
+        btnAccessRecord.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnAccessRecord.setText("OPEN RECORD");
+        btnAccessRecord.setToolTipText("OPEN SELECTED RECORD");
+
+        btnReport.setBackground(new java.awt.Color(204, 204, 0));
+        btnReport.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnReport.setText("VIEW REPORT");
+        btnReport.setToolTipText("VIEW REPORT");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -75,39 +93,31 @@ public class AdminDashboard extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        txtSearchQuery.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-
-        btnSearch.setBackground(new java.awt.Color(153, 255, 204));
-        btnSearch.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnSearch.setText("SEARCH");
-
-        btnAccessRecord.setBackground(new java.awt.Color(255, 102, 0));
-        btnAccessRecord.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnAccessRecord.setText("OPEN RECORD");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(btnRegistration, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(btnList)
-                            .addGap(11, 11, 11)
-                            .addComponent(btnListTable, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtSearchQuery)
-                                .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnAccessRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnRegistration, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnList)
+                                .addGap(11, 11, 11)
+                                .addComponent(btnListTable, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnAccessRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtSearchQuery)
+                            .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnReport, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -125,11 +135,13 @@ public class AdminDashboard extends javax.swing.JFrame {
                         .addComponent(txtSearchQuery, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(27, 27, 27)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAccessRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(btnAccessRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(103, Short.MAX_VALUE))
         );
 
         pack();
@@ -166,6 +178,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnList;
     private javax.swing.JComboBox<String> btnListTable;
     private javax.swing.JComboBox<String> btnRegistration;
+    private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSearch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
