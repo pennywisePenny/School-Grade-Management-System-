@@ -3,20 +3,49 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package javaapplication3;
+import javax.swing.*;
+import java.awt.*;
 
-/**
- *
- * @author Priyanka
- */
 public class Login extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
-
+    JLabel imageLabel;
+    
+    
+    
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
+
+        // Create JLabel
+        imageLabel = new JLabel();
+
+        // Set position and size of label
+        imageLabel.setBounds(50, 322, 50, 50);
+        //imageLabel.setBounds()
+        // Load image from resources folder
+        ImageIcon icon = new ImageIcon(
+                getClass().getResource("/assets/logo6.jpg")
+        );
+
+        // Scale image
+        Image scaledImage = icon.getImage().getScaledInstance(
+                50, // width
+                50, // height
+                Image.SCALE_SMOOTH
+        );
+
+        // Set scaled image into label
+        imageLabel.setIcon(new ImageIcon(scaledImage));
+
+        // Add label to frame
+        add(imageLabel);
+
+        // Make window visible
+        setVisible(true);
+        
     }
 
     /**
@@ -38,6 +67,8 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("LOGIN");
+        setPreferredSize(new java.awt.Dimension(550, 550));
+        setResizable(false);
 
         btnAdminLogin1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnAdminLogin1.setText("ADMIN LOGIN");
@@ -62,31 +93,30 @@ public class Login extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(177, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(119, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createSequentialGroup()
                             .addGap(91, 91, 91)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addContainerGap())
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createSequentialGroup()
                             .addGap(93, 93, 93)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(226, 226, 226)))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnAdminLogin3, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAdminLogin1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAdminLogin4, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(222, 222, 222))))
+                        .addGap(73, 73, 73)))
+                .addGap(113, 113, 113))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(174, Short.MAX_VALUE)
+                .addContainerGap(157, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -100,7 +130,7 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(btnAdminLogin4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAdminLogin3)
-                .addGap(15, 15, 15))
+                .addGap(19, 19, 19))
         );
 
         pack();
