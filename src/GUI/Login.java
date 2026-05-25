@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package javaapplication3;
+package GUI;
 import javax.swing.*;
 
 public class Login extends JFrame {
@@ -37,7 +37,6 @@ public class Login extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("LOGIN");
-        setPreferredSize(new java.awt.Dimension(550, 550));
         setResizable(false);
 
         btnAdminLogin.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -153,6 +152,7 @@ public class Login extends JFrame {
     private void btnStudentLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStudentLoginActionPerformed
         StudentDashboard Student=new StudentDashboard();
         Student.setVisible(true);
+        
     }//GEN-LAST:event_btnStudentLoginActionPerformed
 
     /**
