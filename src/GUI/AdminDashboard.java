@@ -42,7 +42,6 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ADMIN DASHBOARD");
-        setResizable(false);
 
         btnAdd.setBackground(new java.awt.Color(51, 255, 0));
         btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
