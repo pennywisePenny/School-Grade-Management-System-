@@ -7,6 +7,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/XML/XMLDocument.xml to edit this 
 
 
 <root>
-    
+    <user>root</user>
+    <password>Robin123</password>
+    <host>localhost</host>
+    <port>3306</port>
+    <DB>NIBM</DB>
 </root>
 
