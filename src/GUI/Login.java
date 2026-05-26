@@ -181,7 +181,7 @@ public class Login extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAdminLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminLoginActionPerformed
-        AdminDash Admin=new AdminDash(this, rootPaneCheckingEnabled);
+        AdminDashboard Admin=new AdminDashboard(this, rootPaneCheckingEnabled);
         Admin.setVisible(true);
     }//GEN-LAST:event_btnAdminLoginActionPerformed
 
