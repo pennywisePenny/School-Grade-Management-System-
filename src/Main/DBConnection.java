@@ -15,17 +15,19 @@ import org.w3c.dom.*;
  */
 public class DBConnection {
     
-    static String username, password, host, port, DBName;
+    static String username, password, host, port;//, DBName;
 
-    public static Connection crateConnection() throws Exception {
+    public static Connection createConnection() throws Exception {
+        
+        
 
         File xmlFile = new File("src/XML/DB.xml");
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(xmlFile);
 
-        NodeList NLUser, NLPass, NLHost, NLPort, NLDBName;
-        Element ELuser, ELPass, ELHost, ELPort, ELDBName;
+        NodeList NLUser, NLPass, NLHost, NLPort;//, NLDBName;
+        Element ELuser, ELPass, ELHost, ELPort;//, ELDBName;
 
         NLUser = doc.getElementsByTagName("user");
         ELuser = (Element) NLUser.item(0);
@@ -43,13 +45,19 @@ public class DBConnection {
         ELPort = (Element) NLPort.item(0);
         port = ELPort.getChildNodes().item(0).getNodeValue().trim();
 
-        NLDBName = doc.getElementsByTagName("DB");
+        /*NLDBName = doc.getElementsByTagName("DB");
         ELDBName = (Element) NLDBName.item(0);
-        DBName = ELDBName.getChildNodes().item(0).getNodeValue().trim();
+        DBName = ELDBName.getChildNodes().item(0).getNodeValue().trim();*/
 
-        String url = "jdbc:mysql://" + host + ":" + port + "/" + DBName + "?autoReconnect=true&useSSL=false";
-        Connection con = DriverManager.getConnection(url, username, password);
-
+        String server="jdbc:mysql://"+host+":"+port;
+        String DB = "jdbc:mysql://" + host + ":" + port + "/" + /*DBName*/"nibmeadsgms" + "?autoReconnect=true&useSSL=false";
+        Connection con = DriverManager.getConnection(server, username, password);
+        
+        Statement stmt=con.createStatement();
+        stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS nibmeadsgms;");
+        
+        con=DriverManager.getConnection(DB,username,password);
+        
         return con;
 
     }

@@ -11,6 +11,9 @@ package GUI;
 
 import java.awt.*;
 import javax.swing.*;
+import Main.DBConnection;
+import java.sql.*;
+
 
 public class AdminDashboard extends javax.swing.JDialog {
     
@@ -140,7 +143,7 @@ public class AdminDashboard extends javax.swing.JDialog {
         });
 
         cmbRegistrationOptions.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cmbRegistrationOptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ADMIN", "TEACHER", "STUDENT", "COURSE" }));
+        cmbRegistrationOptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ADMIN", "TEACHER", "STUDENT", "COURSE", " " }));
 
         txtSearchQuery.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
@@ -438,23 +441,37 @@ public class AdminDashboard extends javax.swing.JDialog {
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        switch(cmbRegistrationOptions.getSelectedIndex())
+       switch(cmbRegistrationOptions.getSelectedIndex())
         {
             case 0:
-            System.out.println("ADMIN");
+                AddAdmin Admin=new AddAdmin(this, rootPaneCheckingEnabled);
+                Admin.setVisible(true);
             break;
             case 1:
-            System.out.println("TEACHER");
+                AddTeacher Teacher=new AddTeacher(this, rootPaneCheckingEnabled);
+                Teacher.setVisible(true);
             break;
             case 2:
-            System.out.println("STUDENT");
+                AddStudent Student=new AddStudent(this, rootPaneCheckingEnabled);
+                Student.setVisible(true);
             break;
             case 3:
-            System.out.println("SUBJECT");
+                AddSubject Subject=new AddSubject(this, rootPaneCheckingEnabled);
+                Subject.setVisible(true);
             break;
             default:
-            System.out.println("INVALID CHOICE");
+                JOptionPane.showMessageDialog(rootPane, "NO OPTION CHOSEN", "ERROR", 2);
         }
+       
+       /*try
+       {
+           Connection con=DBConnection.createConnection();
+           System.out.println("DATABASE SUCCESSFULLY CREATED");
+       }
+       catch(Exception e)
+       {
+           System.err.println(e);
+       }*/
     }//GEN-LAST:event_btnAddActionPerformed
 
     /**

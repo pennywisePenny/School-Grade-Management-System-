@@ -3,11 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Priyanka/Desktop/JavaApplication3/src/Main/Main.java</file>
-            <file>file:/C:/Users/Priyanka/Desktop/JavaApplication3/src/GUI/Login.java</file>
-            <file>file:/C:/Users/Priyanka/Desktop/JavaApplication3/src/GUI/LecturerDashboard.java</file>
-            <file>file:/C:/Users/Priyanka/Desktop/JavaApplication3/src/GUI/StudentDashboard.java</file>
-            <file>file:/C:/Users/Priyanka/Desktop/JavaApplication3/src/GUI/AdminDashboard.java</file>
+            <file>file:/C:/Users/Priyanka/Desktop/JavaApplication3/src/Main/DBConnection.java</file>
             <file>file:/C:/Users/Priyanka/Desktop/JavaApplication3/src/XML/DB.xml</file>
         </group>
     </open-files>
