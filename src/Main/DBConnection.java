@@ -9,17 +9,11 @@ import java.sql.*;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
-/**
- *
- * @author Priyanka
- */
 public class DBConnection {
     
     static String username, password, host, port;//, DBName;
 
     public static Connection createConnection() throws Exception {
-        
-        
 
         File xmlFile = new File("src/XML/DB.xml");
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();

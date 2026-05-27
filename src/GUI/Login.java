@@ -186,12 +186,12 @@ public class Login extends JFrame {
     }//GEN-LAST:event_btnAdminLoginActionPerformed
 
     private void btnLecturerLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLecturerLoginActionPerformed
-        LecturerDashboard Lecturer=new LecturerDashboard();
+        LecturerDashboard Lecturer=new LecturerDashboard(this, rootPaneCheckingEnabled);
         Lecturer.setVisible(true);
     }//GEN-LAST:event_btnLecturerLoginActionPerformed
 
     private void btnStudentLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStudentLoginActionPerformed
-        StudentDashboard Student=new StudentDashboard();
+        StudentDashboard Student=new StudentDashboard(this, rootPaneCheckingEnabled);
         Student.setVisible(true);
         
     }//GEN-LAST:event_btnStudentLoginActionPerformed

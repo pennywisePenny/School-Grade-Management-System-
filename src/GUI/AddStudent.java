@@ -4,10 +4,6 @@
  */
 package GUI;
 
-/**
- *
- * @author Priyanka
- */
 public class AddStudent extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AddStudent.class.getName());
