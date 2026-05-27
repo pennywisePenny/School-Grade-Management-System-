@@ -49,8 +49,14 @@ public class DBConnection {
         
         Statement stmt=con.createStatement();
         stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS nibmeadsgms;");
-        
         con=DriverManager.getConnection(DB,username,password);
+        stmt=con.createStatement();
+        stmt.executeUpdate("""
+                           CREATE TABLE IF NOT EXISTS users(username varchar(50) primary key,
+                                                            password varchar(50) not null,
+                                                            role     varchar(20) not null,
+                                                            fullname varchar(150));
+                           """);
         
         return con;
 

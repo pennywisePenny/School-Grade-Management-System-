@@ -436,7 +436,7 @@ public class AdminDashboard extends javax.swing.JDialog {
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-       switch(cmbRegistrationOptions.getSelectedIndex())
+      /* switch(cmbRegistrationOptions.getSelectedIndex())
         {
             case 0:
                 AddAdmin Admin=new AddAdmin(this, rootPaneCheckingEnabled);
@@ -456,9 +456,9 @@ public class AdminDashboard extends javax.swing.JDialog {
             break;
             default:
                 JOptionPane.showMessageDialog(rootPane, "NO OPTION CHOSEN", "ERROR", 2);
-        }
+        }*/
        
-       /*try
+       try
        {
            Connection con=DBConnection.createConnection();
            System.out.println("DATABASE SUCCESSFULLY CREATED");
@@ -466,7 +466,7 @@ public class AdminDashboard extends javax.swing.JDialog {
        catch(Exception e)
        {
            System.err.println(e);
-       }*/
+       }
     }//GEN-LAST:event_btnAddActionPerformed
 
     /**

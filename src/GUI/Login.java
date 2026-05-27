@@ -5,6 +5,8 @@
 package GUI;
 import javax.swing.*;
 import java.awt.*;
+import Main.DBConnection;
+import java.sql.*;
 
 public class Login extends JFrame {
     
@@ -34,12 +36,10 @@ public class Login extends JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        txtUsername1 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
-        btnStudentLogin = new javax.swing.JButton();
-        btnLecturerLogin = new javax.swing.JButton();
-        btnAdminLogin = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        txtPassword = new javax.swing.JTextField();
+        btnLogin = new javax.swing.JButton();
         lblUserImg = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -65,34 +65,18 @@ public class Login extends JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel2.setText("USERNAME");
 
-        txtUsername1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtUsername.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel3.setText("PASSWORD");
 
-        txtUsername.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        btnStudentLogin.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnStudentLogin.setText("STUDENT LOGIN");
-        btnStudentLogin.addActionListener(new java.awt.event.ActionListener() {
+        btnLogin.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnLogin.setText("LOGIN");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnStudentLoginActionPerformed(evt);
-            }
-        });
-
-        btnLecturerLogin.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnLecturerLogin.setText("LECTURER LOGIN");
-        btnLecturerLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLecturerLoginActionPerformed(evt);
-            }
-        });
-
-        btnAdminLogin.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnAdminLogin.setText("ADMIN LOGIN");
-        btnAdminLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdminLoginActionPerformed(evt);
+                btnLoginActionPerformed(evt);
             }
         });
 
@@ -128,18 +112,16 @@ public class Login extends JFrame {
                         .addGap(190, 190, 190))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnLecturerLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAdminLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnStudentLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(172, 172, 172))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtUsername1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(100, 100, 100))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(187, 187, 187))))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(178, 178, 178)
+                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,18 +134,14 @@ public class Login extends JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtUsername1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addComponent(btnAdminLogin)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnLecturerLogin)
-                .addGap(12, 12, 12)
-                .addComponent(btnStudentLogin)
-                .addContainerGap())
+                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(59, 59, 59)
+                .addComponent(btnLogin)
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -180,21 +158,47 @@ public class Login extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAdminLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminLoginActionPerformed
-        AdminDashboard Admin=new AdminDashboard(this, rootPaneCheckingEnabled);
-        Admin.setVisible(true);
-    }//GEN-LAST:event_btnAdminLoginActionPerformed
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
 
-    private void btnLecturerLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLecturerLoginActionPerformed
-        LecturerDashboard Lecturer=new LecturerDashboard(this, rootPaneCheckingEnabled);
-        Lecturer.setVisible(true);
-    }//GEN-LAST:event_btnLecturerLoginActionPerformed
-
-    private void btnStudentLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStudentLoginActionPerformed
-        StudentDashboard Student=new StudentDashboard(this, rootPaneCheckingEnabled);
-        Student.setVisible(true);
-        
-    }//GEN-LAST:event_btnStudentLoginActionPerformed
+        if( !txtUsername.getText().trim().isEmpty() && !txtPassword.getText().trim().isEmpty() )
+            try 
+            {
+            
+                Connection con=DBConnection.createConnection();
+                PreparedStatement pstmt=con.prepareStatement("select * from users where username = ? AND password = ?;");
+                pstmt.setString(1,txtUsername.getText());
+                pstmt.setString(2,txtPassword.getText());
+                ResultSet result=pstmt.executeQuery();
+                if(result.next())
+                {
+                    switch(result.getString("role"))
+                    {
+                        case "admin":
+                            AdminDashboard Admin=new AdminDashboard(this, rootPaneCheckingEnabled);
+                            Admin.setVisible(true);
+                        break;
+                        
+                        case "student":
+                            StudentDashboard Student=new StudentDashboard(this, rootPaneCheckingEnabled);
+                            Student.setVisible(true);
+                        break;
+                        
+                        case "lecturer":
+                            LecturerDashboard Lecturer=new LecturerDashboard(this, rootPaneCheckingEnabled);
+                            Lecturer.setVisible(true);
+                        break;
+                    }
+                }
+                else
+                    JOptionPane.showMessageDialog(rootPane, "Invalid Password or Username", "ERROR", 0);
+            }
+            catch(Exception e)
+            {
+            
+            }
+        else
+            JOptionPane.showMessageDialog(rootPane, "PLEASE PROVIDE BOTH A USERNAME AND A PASSWORD", "INVALID INPUTS", 2);
+    }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
      * @param args the command line arguments
@@ -223,9 +227,7 @@ public class Login extends JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdminLogin;
-    private javax.swing.JButton btnLecturerLogin;
-    private javax.swing.JButton btnStudentLogin;
+    private javax.swing.JButton btnLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -234,7 +236,7 @@ public class Login extends JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JLabel lblUserImg;
+    private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtUsername;
-    private javax.swing.JTextField txtUsername1;
     // End of variables declaration//GEN-END:variables
 }
