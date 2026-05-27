@@ -124,8 +124,10 @@ public class AdminDashboard extends javax.swing.JDialog {
         btnReport1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("ADMIN DASHBOARD");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setToolTipText("");
 
         btnAdd.setBackground(new java.awt.Color(51, 255, 0));
         btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
