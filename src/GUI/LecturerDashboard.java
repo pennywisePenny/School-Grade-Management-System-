@@ -11,6 +11,13 @@ public class LecturerDashboard extends javax.swing.JDialog {
     /**
      * Creates new form LecturerDashboard
      */
+    
+    private static String fullName;
+    
+    public static void setFullName(String name)
+    {
+        fullName=name;
+    }
     public LecturerDashboard(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();

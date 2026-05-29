@@ -3,19 +3,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package GUI;
-
 import Main.DBConnection;
 import java.sql.*;
 import javax.swing.*;
 
-public class AddAdmin extends javax.swing.JDialog {
+public class Fullname extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AddAdmin.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Fullname.class.getName());
 
     /**
-     * Creates new form AddAdmin
+     * Creates new form Fullname
+     * 
+     * 
      */
-    public AddAdmin(java.awt.Dialog parent, boolean modal) {
+    
+    private static ResultSet user;
+    
+    
+    public static void getUserInfo(ResultSet usr)
+    {
+        user=usr;
+    }
+    public Fullname(java.awt.Dialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -31,34 +40,33 @@ public class AddAdmin extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtUsername = new javax.swing.JTextField();
+        txtFirstname = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        txtPassword = new javax.swing.JTextField();
+        txtLastname = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        btnAddAdminSubmit = new javax.swing.JButton();
+        btnSubmitFullname = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("ADD ADMIN");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setText("ADD ADMIN");
+        jLabel1.setText("ENTER YOUR FULL NAME");
 
-        txtUsername.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        txtUsername.setToolTipText("");
+        txtFirstname.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtFirstname.setToolTipText("");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel2.setText("USERNAME");
+        jLabel2.setText("FIRSTNAME");
 
-        txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtLastname.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel3.setText("PASSWORD");
+        jLabel3.setText("LASTNAME");
 
-        btnAddAdminSubmit.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnAddAdminSubmit.setText("SUBMIT");
-        btnAddAdminSubmit.addActionListener(new java.awt.event.ActionListener() {
+        btnSubmitFullname.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnSubmitFullname.setText("SUBMIT");
+        btnSubmitFullname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddAdminSubmitActionPerformed(evt);
+                btnSubmitFullnameActionPerformed(evt);
             }
         });
 
@@ -66,27 +74,30 @@ public class AddAdmin extends javax.swing.JDialog {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
-                .addGap(141, 141, 141))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(183, 183, 183)
+                .addComponent(jLabel3)
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(152, 152, 152)
-                        .addComponent(jLabel3))
+                        .addGap(182, 182, 182)
+                        .addComponent(jLabel2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(74, 74, 74)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 78, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(153, 153, 153)
-                .addComponent(btnAddAdminSubmit)
+                        .addGap(180, 180, 180)
+                        .addComponent(btnSubmitFullname)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 111, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtLastname, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(101, 101, 101))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(111, 111, 111))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -95,21 +106,21 @@ public class AddAdmin extends javax.swing.JDialog {
                 .addGap(73, 73, 73)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnAddAdminSubmit)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addComponent(txtLastname, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnSubmitFullname)
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,26 +130,35 @@ public class AddAdmin extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAddAdminSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddAdminSubmitActionPerformed
-        try
-        {
-            if( !txtUsername.getText().trim().isEmpty() && !txtPassword.getText().trim().isEmpty() )
+    private void btnSubmitFullnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitFullnameActionPerformed
+            
+            try
             {
-                Connection con=DBConnection.createConnection();
-                PreparedStatement pstmt=con.prepareStatement("insert into users(username,password,role) values(?,?,'admin');");
-                pstmt.setString(1,txtUsername.getText().trim());
-                pstmt.setString(2,txtPassword.getText().trim());
-                pstmt.executeUpdate();
+                
+                if( !txtFirstname.getText().trim().isEmpty() && !txtLastname.getText().trim().isEmpty() )
+                {
+                    Connection con=DBConnection.createConnection();
+                    PreparedStatement pstmt=con.prepareStatement("update users set fullname=? where username=?;");
+                    pstmt.setString(1,txtFirstname.getText().trim()+" "+txtLastname.getText().trim());
+                    pstmt.setString(2,user.getString("username"));
+                    pstmt.executeUpdate();
+                    pstmt=con.prepareStatement("select * from users where username = ?");
+                    pstmt.setString(1,user.getString("username"));
+                    ResultSet user=pstmt.executeQuery();
+                    AdminDashboard.getUserInfo(user);
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(rootPane, "Please Input Your Fullname", "INPUT YOUR NAME", WIDTH);
+                }
+                
             }
-            else
-                JOptionPane.showMessageDialog(rootPane, "Please Input Both a valid password and username", "ADMIN REGISTRATION", 2);
-        }
-        catch(Exception e)
-        {
-            JOptionPane.showMessageDialog(rootPane, "User Already Exists", "REGISTRATION FAILED", 2);
-        }
+            catch(Exception e)
+            {
 
-    }//GEN-LAST:event_btnAddAdminSubmitActionPerformed
+                JOptionPane.showMessageDialog(rootPane, "Please Input Your Fullname", "INPUT YOUR NAME", WIDTH);
+            }
+    }//GEN-LAST:event_btnSubmitFullnameActionPerformed
 
     /**
      * @param args the command line arguments
@@ -165,7 +185,7 @@ public class AddAdmin extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                AddAdmin dialog = new AddAdmin(new javax.swing.JDialog(), true);
+                Fullname dialog = new Fullname(new javax.swing.JDialog(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -178,12 +198,12 @@ public class AddAdmin extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddAdminSubmit;
+    private javax.swing.JButton btnSubmitFullname;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField txtPassword;
-    private javax.swing.JTextField txtUsername;
+    private javax.swing.JTextField txtFirstname;
+    private javax.swing.JTextField txtLastname;
     // End of variables declaration//GEN-END:variables
 }

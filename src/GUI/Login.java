@@ -166,14 +166,15 @@ public class Login extends JFrame {
             
                 Connection con=DBConnection.createConnection();
                 PreparedStatement pstmt=con.prepareStatement("select * from users where username = ? AND password = ?;");
-                pstmt.setString(1,txtUsername.getText());
-                pstmt.setString(2,txtPassword.getText());
+                pstmt.setString(1,txtUsername.getText().trim());
+                pstmt.setString(2,txtPassword.getText().trim());
                 ResultSet result=pstmt.executeQuery();
                 if(result.next())
                 {
                     switch(result.getString("role"))
                     {
                         case "admin":
+                            AdminDashboard.getUserInfo(result);
                             AdminDashboard Admin=new AdminDashboard(this, rootPaneCheckingEnabled);
                             Admin.setVisible(true);
                         break;
@@ -194,7 +195,8 @@ public class Login extends JFrame {
             }
             catch(Exception e)
             {
-            
+                System.out.println(e);
+                JOptionPane.showMessageDialog(rootPane, "Server Inaccesible", "ERROR", 0);
             }
         else
             JOptionPane.showMessageDialog(rootPane, "PLEASE PROVIDE BOTH A USERNAME AND A PASSWORD", "INVALID INPUTS", 2);
