@@ -145,6 +145,7 @@ public class Fullname extends javax.swing.JDialog {
                     pstmt=con.prepareStatement("select * from users where username = ?");
                     pstmt.setString(1,user.getString("username"));
                     ResultSet user=pstmt.executeQuery();
+                    user.next();
                     AdminDashboard.getUserInfo(user);
                 }
                 else
