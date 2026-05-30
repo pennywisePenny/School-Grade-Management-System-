@@ -59,6 +59,17 @@ public class DBConnection {
                                                             fullname varchar(150)
                            );
                            """);
+        stmt.executeUpdate("""
+                           INSERT INTO users(username, password, role, fullname)
+                           
+                                               select 
+                                                    'ADMIN',
+                                                    'ADMIN',
+                                                    'admin',
+                                                    'ADMIN'
+                           
+                           WHERE NOT EXISTS (SELECT 1 FROM users WHERE username='ADMIN');
+                           """);
         
         stmt.executeUpdate("""
                            CREATE TABLE IF NOT EXISTS subjects(

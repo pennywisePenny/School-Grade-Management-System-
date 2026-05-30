@@ -180,6 +180,7 @@ public class Login extends JFrame {
                         break;
                         
                         case "student":
+                            StudentDashboard.getUserInfo(result);
                             StudentDashboard Student=new StudentDashboard(this, rootPaneCheckingEnabled);
                             Student.setVisible(true);
                         break;

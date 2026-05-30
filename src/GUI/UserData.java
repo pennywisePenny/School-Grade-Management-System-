@@ -151,6 +151,9 @@ public class UserData extends javax.swing.JDialog {
                         case "lecturer":
                             LecturerDashboard.getUserInfo(result);
                         break;
+                        
+                        case "student":
+                            StudentDashboard.getUserInfo(result);
                     }
                     
                     JOptionPane.showMessageDialog(rootPane, "Fullname successfully recorded", "SUCCESS", 3);
