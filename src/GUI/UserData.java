@@ -142,7 +142,17 @@ public class UserData extends javax.swing.JDialog {
                     ResultSet result=pstmt.executeQuery();
                     result.next();
                     
-                    AdminDashboard.getUserInfo(result);
+                    switch(result.getString("role"))
+                    {
+                        case "admin":
+                            AdminDashboard.getUserInfo(result);
+                        break;
+                        
+                        case "lecturer":
+                            LecturerDashboard.getUserInfo(result);
+                        break;
+                    }
+                    
                     JOptionPane.showMessageDialog(rootPane, "Fullname successfully recorded", "SUCCESS", 3);
                     this.dispose();
                 }

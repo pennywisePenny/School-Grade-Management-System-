@@ -185,6 +185,7 @@ public class Login extends JFrame {
                         break;
                         
                         case "lecturer":
+                            LecturerDashboard.getUserInfo(result);
                             LecturerDashboard Lecturer=new LecturerDashboard(this, rootPaneCheckingEnabled);
                             Lecturer.setVisible(true);
                         break;

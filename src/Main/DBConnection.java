@@ -52,11 +52,25 @@ public class DBConnection {
         con=DriverManager.getConnection(DB,username,password);
         stmt=con.createStatement();
         stmt.executeUpdate("""
-                           CREATE TABLE IF NOT EXISTS users(username varchar(50) primary key,
+                           CREATE TABLE IF NOT EXISTS users(
+                                                            username varchar(50) primary key,
                                                             password varchar(50) not null,
                                                             role     varchar(20) not null,
-                                                            fullname varchar(150));
+                                                            fullname varchar(150)
+                           );
                            """);
+        
+        stmt.executeUpdate("""
+                           CREATE TABLE IF NOT EXISTS subjects(
+                                                               subject_id   int primary key auto_increment,
+                                                               subject_name varchar(50) not null unique,
+                                                               credit_hours int         not null,
+                                                               lecturer_username varchar(50),
+                                                               foreign key (lecturer_username) references users(username)
+                                                               on delete set null
+                           );
+                           """);
+        
         
         return con;
 

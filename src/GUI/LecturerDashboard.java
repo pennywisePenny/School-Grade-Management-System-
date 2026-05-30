@@ -4,6 +4,10 @@
  */
 package GUI;
 
+import java.awt.*;
+import java.sql.*;
+import javax.swing.*;
+
 public class LecturerDashboard extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LecturerDashboard.class.getName());
@@ -12,15 +16,45 @@ public class LecturerDashboard extends javax.swing.JDialog {
      * Creates new form LecturerDashboard
      */
     
-    private static String fullName;
+    private static ResultSet userInfo;
     
-    public static void setFullName(String name)
+    
+    public static void getUserInfo(ResultSet usr)
     {
-        fullName=name;
+        userInfo=usr;
     }
+    
     public LecturerDashboard(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowOpened(java.awt.event.WindowEvent e) {
+                UserData.getUserInfo(userInfo);
+                try
+                {
+                    while(userInfo.getString("fullname")==null)
+                    {
+                        UserData userName = new UserData(LecturerDashboard.this, rootPaneCheckingEnabled);
+                        userName.setVisible(true);
+                    }
+                    lblUserFullname.setText(userInfo.getString("fullname"));
+                }
+               catch(Exception s)
+               {
+                   System.out.println(s);
+               }
+            }
+        });
+        
+        ImageIcon userImg = new ImageIcon("src/assets/logo6.jpg");
+        Image scaledUserImage = userImg.getImage().getScaledInstance(
+        lblUserImg.getWidth(), 
+        lblUserImg.getHeight(), 
+        Image.SCALE_SMOOTH // High-quality scaling algorithm
+        );
+        lblUserImg.setIcon(new ImageIcon(scaledUserImage));
     }
 
     /**
@@ -32,22 +66,72 @@ public class LecturerDashboard extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        lblUserFullname = new javax.swing.JLabel();
+        lblUserImg = new javax.swing.JLabel();
+        btnLogout = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("LECTURER DASHBOARD");
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        lblUserFullname.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+
+        btnLogout.setBackground(new java.awt.Color(255, 0, 0));
+        btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnLogout.setText("LOGOUT");
+        btnLogout.setToolTipText("LOGOUT");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblUserImg, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblUserFullname, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnLogout)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblUserImg, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblUserFullname, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnLogout))
+                        .addGap(3, 3, 3)))
+                .addContainerGap(329, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -87,5 +171,9 @@ public class LecturerDashboard extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLogout;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblUserFullname;
+    private javax.swing.JLabel lblUserImg;
     // End of variables declaration//GEN-END:variables
 }
