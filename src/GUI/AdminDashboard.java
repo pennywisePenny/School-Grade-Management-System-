@@ -17,12 +17,12 @@ public class AdminDashboard extends javax.swing.JDialog {
     /**
      * Creates new form AdminDash
      */
-    private static ResultSet user;
+    private static ResultSet userInfo;
     
     
     public static void getUserInfo(ResultSet usr)
     {
-        user=usr;
+        userInfo=usr;
     }
     
     public AdminDashboard(java.awt.Frame parent, boolean modal) {
@@ -32,17 +32,15 @@ public class AdminDashboard extends javax.swing.JDialog {
        this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowOpened(java.awt.event.WindowEvent e) {
-                Fullname.getUserInfo(user);
+                UserData.getUserInfo(userInfo);
                 try
                 {
-                
-                    while(user.getString("fullname")==null)
+                    while(userInfo.getString("fullname")==null)
                     {
-                        Fullname user = new Fullname(AdminDashboard.this, rootPaneCheckingEnabled);
-                        user.setVisible(true);
+                        UserData userName = new UserData(AdminDashboard.this, rootPaneCheckingEnabled);
+                        userName.setVisible(true);
                     }
-                    System.out.println(user.getString("fullname"));
-                    lblUserFullname.setText(user.getString("fullname"));
+                    lblUserFullname.setText(userInfo.getString("fullname"));
                 }
                catch(Exception s)
                {
@@ -531,7 +529,7 @@ public class AdminDashboard extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
-
+        this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed

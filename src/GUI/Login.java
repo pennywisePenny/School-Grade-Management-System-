@@ -191,7 +191,11 @@ public class Login extends JFrame {
                     }
                 }
                 else
+                {
                     JOptionPane.showMessageDialog(rootPane, "Invalid Password or Username", "ERROR", 0);
+                    txtUsername.setText("");
+                    txtPassword.setText("");
+                }
             }
             catch(Exception e)
             {

@@ -4,10 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Priyanka/Desktop/JavaApplication3/src/GUI/Login.java</file>
-            <file>file:/C:/Users/Priyanka/Desktop/JavaApplication3/src/GUI/AddSubject.java</file>
             <file>file:/C:/Users/Priyanka/Desktop/JavaApplication3/src/Main/DBConnection.java</file>
-            <file>file:/C:/Users/Priyanka/Desktop/JavaApplication3/src/XML/DB.xml</file>
             <file>file:/C:/Users/Priyanka/Desktop/JavaApplication3/src/GUI/AdminDashboard.java</file>
+            <file>file:/C:/Users/Priyanka/Desktop/JavaApplication3/src/GUI/Fullname.java</file>
+            <file>file:/C:/Users/Priyanka/Desktop/JavaApplication3/src/GUI/AddAdmin.java</file>
         </group>
     </open-files>
 </project-private>

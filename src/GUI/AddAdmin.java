@@ -129,13 +129,23 @@ public class AddAdmin extends javax.swing.JDialog {
                 pstmt.setString(1,txtUsername.getText().trim());
                 pstmt.setString(2,txtPassword.getText().trim());
                 pstmt.executeUpdate();
+                
+                JOptionPane.showMessageDialog(rootPane, "User Successfully Added", "SUCCESS", 3);
+                this.dispose();
             }
             else
+            {
                 JOptionPane.showMessageDialog(rootPane, "Please Input Both a valid password and username", "ADMIN REGISTRATION", 2);
+                txtUsername.setText("");
+                txtPassword.setText("");
+            }
         }
         catch(Exception e)
         {
+            
             JOptionPane.showMessageDialog(rootPane, "User Already Exists", "REGISTRATION FAILED", 2);
+            txtUsername.setText("");
+            txtPassword.setText("");
         }
 
     }//GEN-LAST:event_btnAddAdminSubmitActionPerformed

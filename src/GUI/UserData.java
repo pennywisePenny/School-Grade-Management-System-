@@ -7,24 +7,19 @@ import Main.DBConnection;
 import java.sql.*;
 import javax.swing.*;
 
-public class Fullname extends javax.swing.JDialog {
+public class UserData extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Fullname.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserData.class.getName());
 
-    /**
-     * Creates new form Fullname
-     * 
-     * 
-     */
     
-    private static ResultSet user;
+    private static ResultSet userInfo;
     
     
     public static void getUserInfo(ResultSet usr)
     {
-        user=usr;
+        userInfo=usr;
     }
-    public Fullname(java.awt.Dialog parent, boolean modal) {
+    public UserData(java.awt.Dialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -140,17 +135,22 @@ public class Fullname extends javax.swing.JDialog {
                     Connection con=DBConnection.createConnection();
                     PreparedStatement pstmt=con.prepareStatement("update users set fullname=? where username=?;");
                     pstmt.setString(1,txtFirstname.getText().trim()+" "+txtLastname.getText().trim());
-                    pstmt.setString(2,user.getString("username"));
+                    pstmt.setString(2,userInfo.getString("username"));
                     pstmt.executeUpdate();
-                    pstmt=con.prepareStatement("select * from users where username = ?");
-                    pstmt.setString(1,user.getString("username"));
-                    ResultSet user=pstmt.executeQuery();
-                    user.next();
-                    AdminDashboard.getUserInfo(user);
+                    pstmt=con.prepareStatement("select * from users where username = ?;");
+                    pstmt.setString(1,userInfo.getString("username"));
+                    ResultSet result=pstmt.executeQuery();
+                    result.next();
+                    
+                    AdminDashboard.getUserInfo(result);
+                    JOptionPane.showMessageDialog(rootPane, "Fullname successfully recorded", "SUCCESS", 3);
+                    this.dispose();
                 }
                 else
                 {
                     JOptionPane.showMessageDialog(rootPane, "Please Input Your Fullname", "INPUT YOUR NAME", WIDTH);
+                    txtFirstname.setText("");
+                    txtLastname.setText("");
                 }
                 
             }
@@ -186,7 +186,7 @@ public class Fullname extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                Fullname dialog = new Fullname(new javax.swing.JDialog(), true);
+                UserData dialog = new UserData(new javax.swing.JDialog(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
