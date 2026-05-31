@@ -195,6 +195,7 @@ public class LecturerDashboard extends javax.swing.JDialog {
         btnLoadStudents.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnLoadStudents.setText("LOAD STUDENTS");
 
+        cmbSubjects.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cmbSubjects.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         tblStudents.setModel(new javax.swing.table.DefaultTableModel(

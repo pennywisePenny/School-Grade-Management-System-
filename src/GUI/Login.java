@@ -203,6 +203,7 @@ public class Login extends JFrame {
             {
                 System.out.println(e);
                 JOptionPane.showMessageDialog(rootPane, "Server Inaccesible", "ERROR", 0);
+                
             }
         else
             JOptionPane.showMessageDialog(rootPane, "PLEASE PROVIDE BOTH A USERNAME AND A PASSWORD", "INVALID INPUTS", 2);

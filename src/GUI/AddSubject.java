@@ -4,6 +4,10 @@
  */
 package GUI;
 
+import Main.DBConnection;
+import javax.swing.*;
+import java.sql.*;
+
 public class AddSubject extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AddSubject.class.getName());
@@ -14,6 +18,29 @@ public class AddSubject extends javax.swing.JDialog {
     public AddSubject(java.awt.Dialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        JComponent editor = spnCreditHours.getEditor();
+        if(editor instanceof JSpinner.DefaultEditor)
+            ((JSpinner.DefaultEditor) editor).getTextField().setEditable(false);
+        
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowOpened(java.awt.event.WindowEvent e) {
+                try
+                {
+                    Connection con=DBConnection.createConnection();
+                    PreparedStatement pstmt=con.prepareStatement("select * from users where role = 'lecturer';");
+                    ResultSet result=pstmt.executeQuery();
+                    
+                    while(result.next())
+                        cmbLecturer.addItem(result.getString("username"));
+                }
+                catch(Exception s)
+                {
+                
+                }
+            }
+        });
     }
 
     /**
@@ -25,21 +52,167 @@ public class AddSubject extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtSubjectName = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        btnAddSubjectSubmit = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        spnCreditHours = new javax.swing.JSpinner();
+        cmbLecturer = new javax.swing.JComboBox<>();
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setText("ADD SUBJECT");
+
+        txtSubjectName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtSubjectName.setToolTipText("");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setText("SUBJECT NAME");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setText("CREDIT HOURS");
+
+        btnAddSubjectSubmit.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnAddSubjectSubmit.setText("SUBMIT");
+        btnAddSubjectSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddSubjectSubmitActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel4.setText("LECTURER");
+
+        spnCreditHours.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        spnCreditHours.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+
+        cmbLecturer.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(87, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addGap(131, 131, 131))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(132, 132, 132))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(spnCreditHours)
+                            .addComponent(txtSubjectName)
+                            .addComponent(cmbLecturer, 0, 227, Short.MAX_VALUE))
+                        .addGap(86, 86, 86))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(157, 157, 157))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnAddSubjectSubmit)
+                        .addGap(147, 147, 147))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addGap(73, 73, 73)
+                .addComponent(jLabel2)
+                .addGap(7, 7, 7)
+                .addComponent(txtSubjectName, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(spnCreditHours, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4)
+                .addGap(5, 5, 5)
+                .addComponent(cmbLecturer, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addComponent(btnAddSubjectSubmit)
+                .addGap(42, 42, 42))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 344, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAddSubjectSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSubjectSubmitActionPerformed
+        /*try
+        {
+            if( !txtUsername.getText().trim().isEmpty() && !txtPassword.getText().trim().isEmpty() )
+            {
+                Connection con=DBConnection.createConnection();
+                PreparedStatement pstmt=con.prepareStatement("insert into users(username,password,role) values(?,?,'lecturer');");
+                pstmt.setString(1,txtUsername.getText().trim());
+                pstmt.setString(2,txtPassword.getText().trim());
+                pstmt.executeUpdate();
+
+                JOptionPane.showMessageDialog(rootPane, "User Successfully Added", "SUCCESS", 3);
+                this.dispose();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(rootPane, "Please Input Both a valid password and username", "LECTURER REGISTRATION", 2);
+                txtUsername.setText("");
+                txtPassword.setText("");
+            }
+        }
+        catch(Exception e)
+        {
+
+            JOptionPane.showMessageDialog(rootPane, "User Already Exists", "REGISTRATION FAILED", 2);
+            txtUsername.setText("");
+            txtPassword.setText("");
+        }*/
+        
+        try
+        {
+            if( !txtSubjectName.getText().trim().isEmpty() )
+            {
+                Connection con=DBConnection.createConnection();
+                PreparedStatement pstmt=con.prepareStatement("insert into subjects(subject_name,credit_hours,lecturer_username) values(?,?,?)");
+                pstmt.setString(1,txtSubjectName.getText().trim());
+                pstmt.setInt(2,(Integer)spnCreditHours.getValue());
+                pstmt.setString(3,cmbLecturer.getSelectedItem().toString());
+                pstmt.executeUpdate();
+            }
+            else
+            {
+               JOptionPane.showMessageDialog(rootPane, "Please Provide Valid Inputs", "FAILED", 2);
+               txtSubjectName.setText("");
+            }
+        }
+        catch(SQLIntegrityConstraintViolationException e)
+        {
+            JOptionPane.showMessageDialog(rootPane, "Subject Already Exists", "ERROR", 0);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(rootPane, "Database Connection Failed", "ERROR", 0);
+        }
+    }//GEN-LAST:event_btnAddSubjectSubmitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,5 +252,15 @@ public class AddSubject extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddSubjectSubmit;
+    private javax.swing.JComboBox<String> cmbLecturer;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JSpinner spnCreditHours;
+    private javax.swing.JTextField txtSubjectName;
     // End of variables declaration//GEN-END:variables
 }

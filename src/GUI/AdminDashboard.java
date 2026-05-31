@@ -179,7 +179,7 @@ public class AdminDashboard extends javax.swing.JDialog {
         });
 
         cmbRegistrationOptions.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cmbRegistrationOptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ADMIN", "TEACHER", "STUDENT", "COURSE" }));
+        cmbRegistrationOptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ADMIN", "TEACHER", "STUDENT", "SUBJECT" }));
 
         txtSearchQuery.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
