@@ -7,7 +7,8 @@ package GUI;
 import java.awt.*;
 import java.sql.*;
 import javax.swing.*;
-
+import Main.DBConnection;
+        
 public class LecturerDashboard extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LecturerDashboard.class.getName());
@@ -40,6 +41,12 @@ public class LecturerDashboard extends javax.swing.JDialog {
                         userName.setVisible(true);
                     }
                     lblUserFullname.setText(userInfo.getString("fullname"));
+                    Connection con=DBConnection.createConnection();
+                    PreparedStatement pstmt=con.prepareStatement("select count(*) as total_subjects from subjects where lecturer_username=?;");
+                    pstmt.setString(1,userInfo.getString("username"));
+                    ResultSet result=pstmt.executeQuery();
+                    result.next();
+                    txtTotalSubjects.setText(Integer.toString(result.getInt("total_subjects")));
                 }
                catch(Exception s)
                {

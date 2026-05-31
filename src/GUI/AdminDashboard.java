@@ -41,6 +41,23 @@ public class AdminDashboard extends javax.swing.JDialog {
                         userName.setVisible(true);
                     }
                     lblUserFullname.setText(userInfo.getString("fullname"));
+
+                    Connection con=DBConnection.createConnection();
+                    PreparedStatement pstmt=con.prepareStatement("select count(*) as total_subjects from subjects;");
+                    ResultSet result=pstmt.executeQuery();
+                    result.next();
+                    txtTotalSubjects.setText(Integer.toString(result.getInt("total_subjects")));
+                    
+                    
+                    pstmt=con.prepareStatement("select count(*) as total_students from users where role='student';");
+                    result=pstmt.executeQuery();
+                    result.next();
+                    txtTotalStudents.setText(Integer.toString(result.getInt("total_students")));
+                    
+                    pstmt=con.prepareStatement("select count(*) as total_lecturers from users where role='lecturer';");
+                    result=pstmt.executeQuery();
+                    result.next();
+                    txtTotalLecturers.setText(Integer.toString(result.getInt("total_lecturers")));
                 }
                catch(Exception s)
                {
@@ -296,18 +313,16 @@ public class AdminDashboard extends javax.swing.JDialog {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel4))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(lblSubjectImg, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtTotalSubjects, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel5Layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jLabel4))
+                        .addGroup(jPanel5Layout.createSequentialGroup()
+                            .addGap(32, 32, 32)
+                            .addComponent(lblSubjectImg, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(15, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(txtTotalSubjects, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

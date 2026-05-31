@@ -140,12 +140,16 @@ public class AddAdmin extends javax.swing.JDialog {
                 txtPassword.setText("");
             }
         }
-        catch(Exception e)
+        catch(SQLIntegrityConstraintViolationException e)
         {
             
             JOptionPane.showMessageDialog(rootPane, "User Already Exists", "REGISTRATION FAILED", 2);
             txtUsername.setText("");
             txtPassword.setText("");
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(rootPane, "Database Connection Failed", "ERROR", 0);
         }
 
     }//GEN-LAST:event_btnAddAdminSubmitActionPerformed
