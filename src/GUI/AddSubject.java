@@ -159,34 +159,7 @@ public class AddSubject extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddSubjectSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSubjectSubmitActionPerformed
-        /*try
-        {
-            if( !txtUsername.getText().trim().isEmpty() && !txtPassword.getText().trim().isEmpty() )
-            {
-                Connection con=DBConnection.createConnection();
-                PreparedStatement pstmt=con.prepareStatement("insert into users(username,password,role) values(?,?,'lecturer');");
-                pstmt.setString(1,txtUsername.getText().trim());
-                pstmt.setString(2,txtPassword.getText().trim());
-                pstmt.executeUpdate();
 
-                JOptionPane.showMessageDialog(rootPane, "User Successfully Added", "SUCCESS", 3);
-                this.dispose();
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(rootPane, "Please Input Both a valid password and username", "LECTURER REGISTRATION", 2);
-                txtUsername.setText("");
-                txtPassword.setText("");
-            }
-        }
-        catch(Exception e)
-        {
-
-            JOptionPane.showMessageDialog(rootPane, "User Already Exists", "REGISTRATION FAILED", 2);
-            txtUsername.setText("");
-            txtPassword.setText("");
-        }*/
-        
         try
         {
             if( !txtSubjectName.getText().trim().isEmpty() )
@@ -197,10 +170,11 @@ public class AddSubject extends javax.swing.JDialog {
                 pstmt.setInt(2,(Integer)spnCreditHours.getValue());
                 pstmt.setString(3,cmbLecturer.getSelectedItem().toString());
                 pstmt.executeUpdate();
+                JOptionPane.showMessageDialog(rootPane, "Subject Added", "FAILED", 1);
             }
             else
             {
-               JOptionPane.showMessageDialog(rootPane, "Please Provide Valid Inputs", "FAILED", 2);
+               JOptionPane.showMessageDialog(rootPane, "Please Provide Subject Name", "FAILED", 2);
                txtSubjectName.setText("");
             }
         }
