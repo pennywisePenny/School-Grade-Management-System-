@@ -9,24 +9,35 @@ import java.sql.*;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
-public class DBConnection {
+public class DBConnection 
+{
     
-    static String username, password, host, port;//, DBName;
+    static String username, password, host, port, DBName;
 
-    public static Connection createConnection() throws Exception {
+    public static Connection createConnection() throws Exception 
+    {
+        
+        String server="jdbc:mysql://"+host+":"+port;
+        Connection con=DriverManager.getConnection(server+"/"+DBName+"?autoReconnect=true&useSSL=false",username,password);
 
+        return con;
+
+    }
+    
+    public static void createDB() throws Exception
+    {
         File xmlFile = new File("src/XML/DB.xml");
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(xmlFile);
 
-        NodeList NLUser, NLPass, NLHost, NLPort;//, NLDBName;
-        Element ELuser, ELPass, ELHost, ELPort;//, ELDBName;
+        NodeList NLUser, NLPass, NLHost, NLPort, NLDBName;
+        Element ELuser, ELPass, ELHost, ELPort, ELDBName;
 
         NLUser = doc.getElementsByTagName("user");
         ELuser = (Element) NLUser.item(0);
         username = ELuser.getChildNodes().item(0).getNodeValue().trim();
-
+     
         NLPass = doc.getElementsByTagName("password");
         ELPass = (Element) NLPass.item(0);
         password = ELPass.getChildNodes().item(0).getNodeValue().trim();
@@ -38,53 +49,58 @@ public class DBConnection {
         NLPort = doc.getElementsByTagName("port");
         ELPort = (Element) NLPort.item(0);
         port = ELPort.getChildNodes().item(0).getNodeValue().trim();
-
-        /*NLDBName = doc.getElementsByTagName("DB");
-        ELDBName = (Element) NLDBName.item(0);
-        DBName = ELDBName.getChildNodes().item(0).getNodeValue().trim();*/
-
-        String server="jdbc:mysql://"+host+":"+port;
-        String DB = "jdbc:mysql://" + host + ":" + port + "/" + /*DBName*/"nibmeadsgms" + "?autoReconnect=true&useSSL=false";
-        Connection con = DriverManager.getConnection(server, username, password);
         
+        NLDBName = doc.getElementsByTagName("DB");
+        ELDBName = (Element) NLDBName.item(0);
+        DBName = ELDBName.getChildNodes().item(0).getNodeValue().trim();
+        
+        String server="jdbc:mysql://"+host+":"+port;
+        Connection con = DriverManager.getConnection(server, username, password);
         Statement stmt=con.createStatement();
-        stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS nibmeadsgms;");
-        con=DriverManager.getConnection(DB,username,password);
+        stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS "+DBName+";");
+        con=createConnection();
         stmt=con.createStatement();
+        
         stmt.executeUpdate("""
                            CREATE TABLE IF NOT EXISTS users(
-                                                            username varchar(50) primary key,
-                                                            password varchar(50) not null,
-                                                            role     varchar(20) not null,
-                                                            fullname varchar(150)
+                                username VARCHAR(50) PRIMARY KEY,
+                                password VARCHAR(50) NOT NULL,
+                                role     VARCHAR(20) NOT NULL,
+                                fullname VARCHAR(150)
                            );
                            """);
         stmt.executeUpdate("""
                            INSERT INTO users(username, password, role, fullname)
-                           
-                                               select 
-                                                    'ADMIN',
-                                                    'ADMIN',
-                                                    'admin',
-                                                    'ADMIN'
-                           
-                           WHERE NOT EXISTS (SELECT 1 FROM users WHERE username='ADMIN');
+                                select 'admin','admin','admin','admin'
+                           WHERE NOT EXISTS (SELECT 1 FROM users WHERE username='admin');
                            """);
         
         stmt.executeUpdate("""
                            CREATE TABLE IF NOT EXISTS subjects(
-                                                               subject_id   int primary key auto_increment,
-                                                               subject_name varchar(50) not null unique,
-                                                               credit_hours int         not null,
-                                                               lecturer_username varchar(50),
-                                                               foreign key (lecturer_username) references users(username)
-                                                               on delete set null
+                                subject_id          INT PRIMARY KEY AUTO_INCREMENT,
+                                subject_name        VARCHAR(50) NOT NULL UNIQUE,
+                                credit_hours        INT NOT NULL,
+                                lecturer_username   VARCHAR(50),
+                           
+                                FOREIGN KEY (lecturer_username) REFERENCES users(username)
+                                ON DELETE SET NULL
                            );
                            """);
         
-        
-        return con;
-
+        stmt.executeUpdate("""
+                           CREATE TABLE IF NOT EXISTS student_subjects(
+                                id                INT PRIMARY KEY AUTO_INCREMENT,
+                                student_username  VARCHAR(50) NOT NULL,
+                                subject_name      VARCHAR(50) NOT NULL,
+                           
+                                FOREIGN KEY (student_username) REFERENCES users(username)
+                                ON DELETE CASCADE,
+                           
+                                FOREIGN KEY (subject_name) REFERENCES subjects(subject_name)
+                                ON DELETE CASCADE
+                           );
+                           
+                           """);
     }
     
 }
