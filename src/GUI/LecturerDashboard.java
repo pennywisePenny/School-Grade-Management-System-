@@ -8,6 +8,7 @@ import java.awt.*;
 import java.sql.*;
 import javax.swing.*;
 import Main.DBConnection;
+import java.lang.classfile.instruction.ConvertInstruction;
 import javax.swing.table.DefaultTableModel;
         
 public class LecturerDashboard extends javax.swing.JDialog {
@@ -22,7 +23,16 @@ public class LecturerDashboard extends javax.swing.JDialog {
         userInfo=usr;
     }
     
-    private DefaultTableModel model=new DefaultTableModel();
+    private DefaultTableModel model=new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column)
+        {
+            if(column==3)
+                return true;
+            return false;
+        }
+        
+    };
     
     public LecturerDashboard(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -47,7 +57,12 @@ public class LecturerDashboard extends javax.swing.JDialog {
                     result.next();
                     txtTotalSubjects.setText(Integer.toString(result.getInt("total_subjects")));
                     
-                    con=DBConnection.createConnection();
+                    pstmt=con.prepareStatement("select count(*) as total_students from student_subjects where subject_name in (select subject_name from subjects where lecturer_username=?);");
+                    pstmt.setString(1,userInfo.getString("username"));
+                    result=pstmt.executeQuery();
+                    result.next();
+                    txtTotalStudents.setText(Integer.toString(result.getInt("total_students")));
+                    
                     pstmt=con.prepareStatement("select * from subjects where lecturer_username =?;");
                     pstmt.setString(1,userInfo.getString("username"));
                     result=pstmt.executeQuery();
@@ -56,27 +71,68 @@ public class LecturerDashboard extends javax.swing.JDialog {
                         cmbSubjects.addItem(result.getString("subject_name"));
                     
                     
-                    /*                    model.setRowCount(0);
+                    model.setRowCount(0);
                     model.setColumnIdentifiers(new String[]{
                         "SUBJECT",
                         "CREDIT HOURS",
                         "STUDENT",
                         "MARKS",
-                        "GRADE LETTER"
+                        "GRADE LETTER",
+                        "GPA"
                     });
       
-                    pstmt=con.prepareStatement("select * from subjects where lecturer_username=?;");
-                    pstmt.setString(1,userInfo.getString("username"));
+
+                    
+                    switch(cmbSubjects.getSelectedItem().toString())
+                    {
+                        case "ALL":
+                            pstmt=con.prepareStatement("select * from grades where lecturer_username=?;");
+                            pstmt.setString(1,userInfo.getString("username"));
+                        break;
+                        
+                        default:
+                            pstmt=con.prepareStatement("select * from grades where subject_name=?;");
+                            //pstmt.setString(1,userInfo.getString("username"));
+                            pstmt.setString(1,cmbSubjects.getSelectedItem().toString());
+                    }
                     
                     result=pstmt.executeQuery();
                     
                     while(result.next())
                         model.addRow(new Object[]{
-                                result.getString("subject_name"),
-                                result.getInt("credit_hours")
+                            result.getString("subject_name"),
+                            result.getInt("credit_hours"),
+                            result.getString("student_username"),
+                            result.getDouble("marks"),
+                            result.getString("grade_letter"),
+                            result.getDouble("GPA")
                         });
                     
-                    tblMarks.setModel(model);*/
+                    tblMarks.setModel(model);
+                    
+                    tblMarks.getTableHeader().setResizingAllowed(false);
+                    tblMarks.getColumnModel().getColumn(0).setPreferredWidth(100);
+                    tblMarks.getColumnModel().getColumn(1).setPreferredWidth(80);
+                    tblMarks.getColumnModel().getColumn(2).setPreferredWidth(100);
+                    tblMarks.getColumnModel().getColumn(3).setPreferredWidth(30);
+                    tblMarks.getColumnModel().getColumn(5).setPreferredWidth(30);
+                    tblMarks.getTableHeader().setFont(
+                            new java.awt.Font(
+                                    "Segoe UI",
+                                    java.awt.Font.BOLD,
+                                    16
+                            )
+                    );
+                    
+                    tblMarks.setFont(
+                            new java.awt.Font(
+                                    "Segoe UI",
+                                    java.awt.Font.PLAIN,
+                                    13
+                            )
+                    );
+                    
+                    tblMarks.setRowHeight(25);
                 }
                catch(Exception s)
                {
@@ -226,26 +282,32 @@ public class LecturerDashboard extends javax.swing.JDialog {
         btnLoadStudents.setBackground(new java.awt.Color(204, 255, 204));
         btnLoadStudents.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnLoadStudents.setText("LOAD STUDENTS");
+        btnLoadStudents.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoadStudentsActionPerformed(evt);
+            }
+        });
 
         cmbSubjects.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cmbSubjects.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ALL" }));
 
+        tblMarks.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tblMarks.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "SUBJECT", "CREDIT HOURS", "STUDENT", "MARKS", "GRADE LETTER"
+                "SUBJECT", "CREDIT HOURS", "STUDENT", "MARKS", "GRADE LETTER", "GPA"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, false
+                false, false, false, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -256,17 +318,26 @@ public class LecturerDashboard extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        tblMarks.getTableHeader().setResizingAllowed(false);
         tblMarks.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblMarks);
         if (tblMarks.getColumnModel().getColumnCount() > 0) {
             tblMarks.getColumnModel().getColumn(0).setResizable(false);
             tblMarks.getColumnModel().getColumn(1).setResizable(false);
             tblMarks.getColumnModel().getColumn(2).setResizable(false);
+            tblMarks.getColumnModel().getColumn(3).setResizable(false);
+            tblMarks.getColumnModel().getColumn(4).setResizable(false);
+            tblMarks.getColumnModel().getColumn(5).setResizable(false);
         }
 
         btnSubmitGrade.setBackground(new java.awt.Color(204, 204, 204));
         btnSubmitGrade.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnSubmitGrade.setText("SUBMIT GRADE");
+        btnSubmitGrade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitGradeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -344,6 +415,126 @@ public class LecturerDashboard extends javax.swing.JDialog {
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnLoadStudentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadStudentsActionPerformed
+        
+        try
+        {
+            ResultSet result;
+            Connection con=DBConnection.createConnection();
+            PreparedStatement pstmt;
+        
+            switch(cmbSubjects.getSelectedItem().toString())
+            {
+                case "ALL":
+                    pstmt=con.prepareStatement("select * from grades where lecturer_username=?;");
+                    pstmt.setString(1,userInfo.getString("username"));
+                break;  
+                        
+                default:
+                    pstmt=con.prepareStatement("select * from grades where subject_name=?;");
+                    //pstmt.setString(1,userInfo.getString("username"));
+                    pstmt.setString(1,cmbSubjects.getSelectedItem().toString());
+            }
+            
+            result=pstmt.executeQuery();
+            model.setRowCount(0);
+            
+            while(result.next())
+            model.addRow(new Object[]{
+                result.getString("subject_name"),
+                result.getInt("credit_hours"),
+                result.getString("student_username"),
+                result.getDouble("marks"),
+                result.getString("grade_letter"),
+                result.getDouble("GPA")
+            });
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_btnLoadStudentsActionPerformed
+
+    private String gradeLetter(double m)
+    {
+        String g="";
+        if(m>=85&&m<=100)
+            g="A+";
+        else if(m>=70&&m<=84)
+            g="A";
+        else if(m>=65&&m<=69)
+            g="A-";
+        else if(m>=60&&m<=64)
+            g="B+";
+        else if(m>=55&&m<=59)
+            g="B";
+        else if(m>=50&&m<=54)
+            g="B-";
+        else if(m>=45&&m<=49)
+            g="C+";
+        else if(m>=40&&m<=44)
+            g="C";
+        else if(m>=35&&m<=39)
+            g="C-";
+        else if(m>=30&&m<=34)
+            g="D+";
+        else if(m>=25&&m<=29)
+            g="D";
+        else if(m>=0&&m<=24)
+            g="E";
+        
+        return g;
+    }
+    
+    private double gradePoints(double m)
+    {
+        double p=0.0;
+        if(m>=85&&m<=100)
+            p=4.0;
+        else if(m>=70&&m<=84)
+            p=4.0;
+        else if(m>=65&&m<=69)
+            p=3.7;
+        else if(m>=60&&m<=64)
+            p=3.3;
+        else if(m>=55&&m<=59)
+            p=3.0;
+        else if(m>=50&&m<=54)
+            p=2.7;
+        else if(m>=45&&m<=49)
+            p=2.3;
+        else if(m>=40&&m<=44)
+            p=2.0;
+        else if(m>=35&&m<=39)
+            p=1.7;
+        else if(m>=30&&m<=34)
+            p=1.3;
+        else if(m>=25&&m<=29)
+            p=1.0;
+        else if(m>=0&&m<=24)
+            p=0.0;
+        
+        return p;
+    }
+    
+    private void btnSubmitGradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitGradeActionPerformed
+        for(int row=0;row<model.getRowCount();row++)
+        {  
+            try
+            {
+                if( !model.getValueAt(row,3).toString().trim().isEmpty() )
+                {    
+                    model.setValueAt(gradeLetter(Double.parseDouble(model.getValueAt(row,3).toString().trim())), row, 4);
+                    model.setValueAt(gradeLetter(Double.parseDouble(model.getValueAt(row,3).toString().trim())), row, 5);
+                }
+            }
+            catch(NumberFormatException e)
+            {
+                JOptionPane.showMessageDialog(rootPane, "Please Input Valid MArks", "MARK ALLOCATION FAILED", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnSubmitGradeActionPerformed
 
     public static void main(String args[]) {
 

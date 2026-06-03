@@ -166,18 +166,43 @@ public class AddStudent extends javax.swing.JDialog {
                     {
                         List<String> selectedSubjects = lstSubjects.getSelectedValuesList();
                         Connection con=DBConnection.createConnection();
-                        PreparedStatement pstmt=con.prepareStatement("insert into users(username,password,role) values(?,?,'student');");
+                        PreparedStatement pstmt=con.prepareStatement("insert into users(username,password,role) values(?,?,'student');"),
+                                          pstmt2,pstmt3;
+                        ResultSet result;
                         pstmt.setString(1,txtUsername.getText().trim());
                         pstmt.setString(2,txtPassword.getText().trim());
                         pstmt.executeUpdate();
                         pstmt=con.prepareStatement("insert into student_subjects(student_username,subject_name) values(?,?);");
+                        
+                        pstmt2=con.prepareStatement("select credit_hours,lecturer_username from subjects where subject_name=?;");
+                        
+                        pstmt3=con.prepareStatement("""
+                                                   insert into grades(subject_name,credit_hours,student_username,lecturer_username)
+                                                   values(?,?,?,?);
+                                                   """
+                        );
+                        
+                        
                         for(int i=0;i<selectedSubjects.size();i++)
                         {
                             pstmt.setString(1,txtUsername.getText().trim());
-                            System.out.println(selectedSubjects.get(i));
                             pstmt.setString(2,selectedSubjects.get(i));
                             pstmt.executeUpdate();
+                            
+                            pstmt2.setString(1,selectedSubjects.get(i));
+                            result=pstmt2.executeQuery();
+                            result.next();
+                            
+                            pstmt3.setString(1,selectedSubjects.get(i));
+                            pstmt3.setString(2,result.getString("credit_hours"));
+                            pstmt3.setString(3,txtUsername.getText().trim());
+                            pstmt3.setString(4,result.getString("lecturer_username"));
+                            pstmt3.executeUpdate();
+                            
                         }
+
+                        
+                        
                         JOptionPane.showMessageDialog(rootPane, "User Successfully Added", "STUDENT REGISTRATION SUCCESSFULL", JOptionPane.PLAIN_MESSAGE);
                     }
                     else
