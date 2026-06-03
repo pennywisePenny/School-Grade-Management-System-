@@ -8,6 +8,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/XML/XMLDocument.xml to edit this 
     <password>Robin123</password>
     <host>localhost</host>
     <port>3306</port>
-    <DB>nibmeadsgms</DB>
+    <DB>nibmsgms</DB>
 </root>
 

@@ -97,6 +97,7 @@ public class LecturerDashboard extends javax.swing.JDialog {
                     }
                     
                     result=pstmt.executeQuery();
+                    tblMarks.setModel(model);
                     
                     while(result.next())
                         model.addRow(new Object[]{
@@ -108,7 +109,7 @@ public class LecturerDashboard extends javax.swing.JDialog {
                             result.getDouble("GPA")
                         });
                     
-                    tblMarks.setModel(model);
+                    
                     
                     tblMarks.getTableHeader().setResizingAllowed(false);
                     tblMarks.getColumnModel().getColumn(0).setPreferredWidth(100);
@@ -525,35 +526,43 @@ public class LecturerDashboard extends javax.swing.JDialog {
             String gradeLetter,subjectName="",studentName="";
             try
             {
-                if( !model.getValueAt(row,3).toString().trim().isEmpty() && gradePoints(Double.parseDouble(model.getValueAt(row, 3).toString().trim())) > 0)
+                if( !model.getValueAt(row,3).toString().trim().isEmpty() )
                 {   
-                    Connection con=DBConnection.createConnection();
-                    PreparedStatement pstmt;
-                    marks=Double.parseDouble(model.getValueAt(row,3).toString().trim());
-                    gradeLetter=gradeLetter(marks);
-                    gpa=gradePoints(marks);
+                    if( (Double.parseDouble(model.getValueAt(row, 3).toString().trim()) >= 0) && (Double.parseDouble(model.getValueAt(row, 3).toString().trim()) <= 100) )
+                    {
+                        Connection con=DBConnection.createConnection();
+                        PreparedStatement pstmt;
+                        marks=Double.parseDouble(model.getValueAt(row,3).toString().trim());
+                        gradeLetter=gradeLetter(marks);
+                        gpa=gradePoints(marks);
                     
-                    subjectName=model.getValueAt(row,0).toString();
-                    studentName=model.getValueAt(row,2).toString();
-                    model.setValueAt(gradeLetter, row, 4);
-                    model.setValueAt(gpa, row, 5);
-                    pstmt = con.prepareStatement("update grades set marks = ? where subject_name=? and student_username =?;");
-                    pstmt.setDouble(1,marks);
-                    pstmt.setString(2,subjectName);
-                    pstmt.setString(3,studentName);
-                    pstmt.executeUpdate();
+                        subjectName=model.getValueAt(row,0).toString();
+                        studentName=model.getValueAt(row,2).toString();
+                        model.setValueAt(gradeLetter, row, 4);
+                        model.setValueAt(gpa, row, 5);
+                        pstmt = con.prepareStatement("update grades set marks = ? where subject_name=? and student_username =?;");
+                        pstmt.setDouble(1,marks);
+                        pstmt.setString(2,subjectName);
+                        pstmt.setString(3,studentName);
+                        pstmt.executeUpdate();
                     
-                    pstmt=con.prepareStatement("update grades set grade_letter = ? where subject_name= ? and student_username =?;");
-                    pstmt.setString(1,gradeLetter);
-                    pstmt.setString(2,subjectName);
-                    pstmt.setString(3,studentName);
-                    pstmt.executeUpdate();
+                        pstmt=con.prepareStatement("update grades set grade_letter = ? where subject_name= ? and student_username =?;");
+                        pstmt.setString(1,gradeLetter);
+                        pstmt.setString(2,subjectName);
+                        pstmt.setString(3,studentName);
+                        pstmt.executeUpdate();
                     
-                    pstmt=con.prepareStatement("update grades set gpa = ? where subject_name= ? and student_username =?;");
-                    pstmt.setDouble(1,gpa);
-                    pstmt.setString(2,subjectName);
-                    pstmt.setString(3,studentName);
-                    pstmt.executeUpdate();
+                        pstmt=con.prepareStatement("update grades set gpa = ? where subject_name= ? and student_username =?;");
+                        pstmt.setDouble(1,gpa);
+                        pstmt.setString(2,subjectName);
+                        pstmt.setString(3,studentName);
+                        pstmt.executeUpdate();
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(rootPane, "Please Input a valid number between 0 and 100", "INVALID RANGE", JOptionPane.WARNING_MESSAGE);
+                        model.setValueAt(0.0,row,3);
+                    }
                 }
                 else
                     model.setValueAt(0.0,row,3);

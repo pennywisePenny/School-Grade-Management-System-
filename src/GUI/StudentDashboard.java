@@ -9,17 +9,28 @@ import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import Main.DBConnection;
+import java.io.*;
+import java.io.FileWriter;
 
 public class StudentDashboard extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(StudentDashboard.class.getName());
     private static ResultSet userInfo;
-    private DefaultTableModel model=new DefaultTableModel();
     
     public static void getUserInfo(ResultSet usr)
     {
         userInfo=usr;
     }
+    
+    private DefaultTableModel model=new DefaultTableModel() 
+    {
+        @Override
+        public boolean isCellEditable(int row, int column)
+        {
+            return false;
+        }
+        
+    };
     
     public StudentDashboard(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -31,6 +42,9 @@ public class StudentDashboard extends javax.swing.JDialog {
                 UserData.getUserInfo(userInfo);
                 try
                 {
+                    Connection con=DBConnection.createConnection();
+                    PreparedStatement pstmt;
+                    ResultSet result;
                     while(userInfo.getString("fullname")==null)
                     {
                         UserData userName = new UserData(StudentDashboard.this, rootPaneCheckingEnabled);
@@ -38,30 +52,65 @@ public class StudentDashboard extends javax.swing.JDialog {
                     }
                     lblUserFullname.setText(userInfo.getString("fullname"));
                     
+                    
                     model.setRowCount(0);
                     model.setColumnIdentifiers(new String[]{
                         "SUBJECT",
+                        "CREDIT HOURS",
                         "LECTURER",
                         "MARKS",
-                        "GRADE LETTER"
+                        "GRADE LETTER",
+                        "GPA"
                     });
+                    
+
+                    pstmt=con.prepareStatement("select * from grades where student_username=?;");
+                    pstmt.setString(1,userInfo.getString("username"));
+                    result=pstmt.executeQuery();
                     
                     tblGrades.setModel(model);
                     
-                    Connection con=DBConnection.createConnection();
-                    PreparedStatement pstmt=con.prepareStatement("select * from student_subjects where student_username=?;");
-                    pstmt.setString(1,userInfo.getString("username"));
-                    
-                    ResultSet result=pstmt.executeQuery();
-                    
                     while(result.next())
                         model.addRow(new Object[]{
-                                result.getString("subject_name")
+                            result.getString("subject_name"),
+                            result.getInt("credit_hours"),
+                            result.getString("lecturer_username"),
+                            result.getDouble("marks"),
+                            result.getString("grade_letter")==null?"E":result.getString("grade_letter"),
+                            result.getDouble("GPA")
                         });
+   
+                    
+                    
+                    tblGrades.getTableHeader().setResizingAllowed(false);
+                    tblGrades.getColumnModel().getColumn(0).setPreferredWidth(100);
+                    tblGrades.getColumnModel().getColumn(1).setPreferredWidth(80);
+                    tblGrades.getColumnModel().getColumn(2).setPreferredWidth(100);
+                    tblGrades.getColumnModel().getColumn(3).setPreferredWidth(30);
+                    tblGrades.getColumnModel().getColumn(5).setPreferredWidth(30);
+                    tblGrades.getTableHeader().setFont(
+                            new java.awt.Font(
+                                    "Segoe UI",
+                                    java.awt.Font.BOLD,
+                                    16
+                            )
+                    );
+                    
+                    tblGrades.setFont(
+                            new java.awt.Font(
+                                    "Segoe UI",
+                                    java.awt.Font.PLAIN,
+                                    13
+                            )
+                    );
+                    
+                    tblGrades.setRowHeight(25);
+                    con.close();
                 }
                catch(Exception s)
                {
                    System.out.println(s);
+                   s.printStackTrace();
                }
             }
         });
@@ -111,7 +160,7 @@ public class StudentDashboard extends javax.swing.JDialog {
         txtTotalStudents = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblGrades = new javax.swing.JTable();
-        btnSubmitGrade = new javax.swing.JButton();
+        btnExportMarks = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("STUDENT DASHBOARD");
@@ -239,9 +288,14 @@ public class StudentDashboard extends javax.swing.JDialog {
             tblGrades.getColumnModel().getColumn(3).setResizable(false);
         }
 
-        btnSubmitGrade.setBackground(new java.awt.Color(204, 204, 204));
-        btnSubmitGrade.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnSubmitGrade.setText("EXPORT GRADES AS A CSV FILE");
+        btnExportMarks.setBackground(new java.awt.Color(204, 204, 204));
+        btnExportMarks.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnExportMarks.setText("EXPORT GRADES AS A CSV FILE");
+        btnExportMarks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportMarksActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -267,7 +321,7 @@ public class StudentDashboard extends javax.swing.JDialog {
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1)
-                            .addComponent(btnSubmitGrade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(btnExportMarks, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -288,7 +342,7 @@ public class StudentDashboard extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnSubmitGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnExportMarks, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
@@ -317,9 +371,65 @@ public class StudentDashboard extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void exportToCSV(String filePath)
+    {
+        System.out.println(model.getRowCount());
+        System.out.println(model.getColumnCount());
+        try
+        {
+            FileWriter writer=new FileWriter(filePath);
+            for(int col=0;col<model.getColumnCount();col++)
+            {
+                writer.append(model.getColumnName(col));
+                if(col<model.getColumnCount()-1)
+                    writer.append(",");
+            }
+            writer.append("\n");
+            
+            for(int row=0; row<model.getRowCount();row++)
+            {
+                for(int col=0;col<model.getColumnCount();col++)
+                {
+                    Object value=model.getValueAt(row, col);
+                    writer.append(value==null?"":value.toString());
+                    
+                    if(col<model.getColumnCount()-1)
+                        writer.append(",");
+
+                }
+                writer.append("\n");
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+    }
+    
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnExportMarksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportMarksActionPerformed
+        try{
+        JFileChooser chooser=new JFileChooser();
+        if(chooser.showSaveDialog(this)==JFileChooser.APPROVE_OPTION)
+        {
+            String path=chooser.getSelectedFile().getAbsolutePath();
+            if( !path.toLowerCase().endsWith(".csv") )
+            {
+                path+=".csv";
+            }
+            exportToCSV(path);
+            JOptionPane.showMessageDialog(rootPane, "Export Completed!");
+        }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnExportMarksActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -338,8 +448,8 @@ public class StudentDashboard extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnExportMarks;
     private javax.swing.JButton btnLogout;
-    private javax.swing.JButton btnSubmitGrade;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
