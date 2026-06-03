@@ -104,7 +104,7 @@ public class LecturerDashboard extends javax.swing.JDialog {
                             result.getInt("credit_hours"),
                             result.getString("student_username"),
                             result.getDouble("marks"),
-                            result.getString("grade_letter"),
+                            result.getString("grade_letter")==null?"E":result.getString("grade_letter"),
                             result.getDouble("GPA")
                         });
                     
@@ -332,7 +332,7 @@ public class LecturerDashboard extends javax.swing.JDialog {
 
         btnSubmitGrade.setBackground(new java.awt.Color(204, 204, 204));
         btnSubmitGrade.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnSubmitGrade.setText("SUBMIT GRADE");
+        btnSubmitGrade.setText("SUBMIT GRADES");
         btnSubmitGrade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSubmitGradeActionPerformed(evt);
@@ -446,7 +446,7 @@ public class LecturerDashboard extends javax.swing.JDialog {
                 result.getInt("credit_hours"),
                 result.getString("student_username"),
                 result.getDouble("marks"),
-                result.getString("grade_letter"),
+                result.getString("grade_letter")==null?"E":result.getString("grade_letter"),
                 result.getDouble("GPA")
             });
         }
@@ -521,17 +521,51 @@ public class LecturerDashboard extends javax.swing.JDialog {
     private void btnSubmitGradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitGradeActionPerformed
         for(int row=0;row<model.getRowCount();row++)
         {  
+            double marks,gpa;
+            String gradeLetter,subjectName="",studentName="";
             try
             {
-                if( !model.getValueAt(row,3).toString().trim().isEmpty() )
-                {    
-                    model.setValueAt(gradeLetter(Double.parseDouble(model.getValueAt(row,3).toString().trim())), row, 4);
-                    model.setValueAt(gradeLetter(Double.parseDouble(model.getValueAt(row,3).toString().trim())), row, 5);
+                if( !model.getValueAt(row,3).toString().trim().isEmpty() && gradePoints(Double.parseDouble(model.getValueAt(row, 3).toString().trim())) > 0)
+                {   
+                    Connection con=DBConnection.createConnection();
+                    PreparedStatement pstmt;
+                    marks=Double.parseDouble(model.getValueAt(row,3).toString().trim());
+                    gradeLetter=gradeLetter(marks);
+                    gpa=gradePoints(marks);
+                    
+                    subjectName=model.getValueAt(row,0).toString();
+                    studentName=model.getValueAt(row,2).toString();
+                    model.setValueAt(gradeLetter, row, 4);
+                    model.setValueAt(gpa, row, 5);
+                    pstmt = con.prepareStatement("update grades set marks = ? where subject_name=? and student_username =?;");
+                    pstmt.setDouble(1,marks);
+                    pstmt.setString(2,subjectName);
+                    pstmt.setString(3,studentName);
+                    pstmt.executeUpdate();
+                    
+                    pstmt=con.prepareStatement("update grades set grade_letter = ? where subject_name= ? and student_username =?;");
+                    pstmt.setString(1,gradeLetter);
+                    pstmt.setString(2,subjectName);
+                    pstmt.setString(3,studentName);
+                    pstmt.executeUpdate();
+                    
+                    pstmt=con.prepareStatement("update grades set gpa = ? where subject_name= ? and student_username =?;");
+                    pstmt.setDouble(1,gpa);
+                    pstmt.setString(2,subjectName);
+                    pstmt.setString(3,studentName);
+                    pstmt.executeUpdate();
                 }
+                else
+                    model.setValueAt(0.0,row,3);
             }
             catch(NumberFormatException e)
             {
-                JOptionPane.showMessageDialog(rootPane, "Please Input Valid MArks", "MARK ALLOCATION FAILED", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane, "Please Input Valid Marks", "MARK ALLOCATION FAILED", JOptionPane.WARNING_MESSAGE);
+                model.setValueAt(0.0,row,3);
+            }
+            catch(Exception e)
+            {
+                System.out.println(e);
             }
         }
     }//GEN-LAST:event_btnSubmitGradeActionPerformed
