@@ -22,6 +22,67 @@ public class AdminDashboard extends javax.swing.JDialog {
         userInfo=usr;
     }
     
+    class AdminDashboardUpdateThread extends Thread
+    {
+        private String totalSubjects="",totalStudents="",totalLecturers="",totalGradesRecorded="";
+        
+        private void updateDash()
+        {
+            txtTotalStudents.setText(totalStudents);
+            txtTotalLecturers.setText(totalLecturers);
+            txtTotalSubjects.setText(totalSubjects);
+            txtGradesRecorded.setText(totalGradesRecorded);
+        }
+        @Override
+        public void run()
+        {
+            while(true)
+            {
+                try
+                {
+                    Connection con=DBConnection.createConnection();
+                    PreparedStatement pstmt=con.prepareStatement("select count(*) as total_subjects from subjects;");
+                    ResultSet result=pstmt.executeQuery();
+                    result.next();
+                    totalSubjects=Integer.toString(result.getInt("total_subjects"));
+                    
+                    
+                    pstmt=con.prepareStatement("select count(*) as total_students from users where role='student';");
+                    result=pstmt.executeQuery();
+                    result.next();
+                    totalStudents=Integer.toString(result.getInt("total_students"));
+                    
+                    pstmt=con.prepareStatement("select count(*) as total_lecturers from users where role='lecturer';");
+                    result=pstmt.executeQuery();
+                    result.next();
+                    totalLecturers=Integer.toString(result.getInt("total_lecturers"));
+                    
+                    pstmt=con.prepareStatement("select count(*) as total_grades from grades;");
+                    result=pstmt.executeQuery();
+                    result.next();
+                    totalGradesRecorded=Integer.toString(result.getInt("total_grades"));
+                    
+                    SwingUtilities.invokeLater(()->{
+                        updateDash();
+                    });
+                    
+                    Thread.sleep(1000);
+                }
+                catch(InterruptedException e)
+                {
+                    break;
+                }
+                catch(Exception e)
+                {
+                    System.out.println(e);
+                    e.printStackTrace();
+                }
+            }
+        
+        }
+    }
+    
+    
     public AdminDashboard(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -38,28 +99,14 @@ public class AdminDashboard extends javax.swing.JDialog {
                         userName.setVisible(true);
                     }
                     lblUserFullname.setText(userInfo.getString("fullname"));
-
-                    Connection con=DBConnection.createConnection();
-                    PreparedStatement pstmt=con.prepareStatement("select count(*) as total_subjects from subjects;");
-                    ResultSet result=pstmt.executeQuery();
-                    result.next();
-                    txtTotalSubjects.setText(Integer.toString(result.getInt("total_subjects")));
-                    
-                    
-                    pstmt=con.prepareStatement("select count(*) as total_students from users where role='student';");
-                    result=pstmt.executeQuery();
-                    result.next();
-                    txtTotalStudents.setText(Integer.toString(result.getInt("total_students")));
-                    
-                    pstmt=con.prepareStatement("select count(*) as total_lecturers from users where role='lecturer';");
-                    result=pstmt.executeQuery();
-                    result.next();
-                    txtTotalLecturers.setText(Integer.toString(result.getInt("total_lecturers")));
                }
                catch(Exception s)
-               {
+               { 
                    JOptionPane.showMessageDialog(rootPane, "Database Connection Failed", "ERROR", 0);
                }
+               
+               AdminDashboardUpdateThread Dash=new AdminDashboardUpdateThread();
+               Dash.start();
             }
         });
         
@@ -70,9 +117,7 @@ public class AdminDashboard extends javax.swing.JDialog {
         Image.SCALE_SMOOTH 
         );
         lblStudentImg.setIcon(new ImageIcon(scaledStudentImage));
-        
-        
-        
+
         ImageIcon LecturerImg = new ImageIcon("src/assets/lecturer.png");
         Image scaledLecturerImage = LecturerImg.getImage().getScaledInstance(
         lblLecturerImg.getWidth(), 
@@ -107,26 +152,7 @@ public class AdminDashboard extends javax.swing.JDialog {
         Image.SCALE_SMOOTH 
         );
         lblRecordedImg.setIcon(new ImageIcon(scaledRecordedImage));
-        
-        
-        ImageIcon passedImg = new ImageIcon("src/assets/passed.png");
-        Image scaledPassedImage = passedImg.getImage().getScaledInstance(
-        lblPassedImg.getWidth(), 
-        lblPassedImg.getHeight(), 
-        Image.SCALE_SMOOTH 
-        );
-        lblPassedImg.setIcon(new ImageIcon(scaledPassedImage));
-        
-        
-        ImageIcon failedImg = new ImageIcon("src/assets/failed.png");
-        Image scaledFailedImage = failedImg.getImage().getScaledInstance(
-        lblFailedImg.getWidth(), 
-        lblFailedImg.getHeight(), 
-        Image.SCALE_SMOOTH 
-        );
-        lblFailedImg.setIcon(new ImageIcon(scaledFailedImage));
-       
-    }
+    }   
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -153,14 +179,6 @@ public class AdminDashboard extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         txtTotalSubjects = new javax.swing.JLabel();
         lblUserImg = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        lblPassedImg = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        txtTotalPassed = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
-        lblFailedImg = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        txtTotalFailed = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         lblRecordedImg = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -216,7 +234,7 @@ public class AdminDashboard extends javax.swing.JDialog {
         jLabel1.setText("TOTAL STUDENTS");
 
         txtTotalStudents.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtTotalStudents.setText("100");
+        txtTotalStudents.setText("0");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -256,7 +274,7 @@ public class AdminDashboard extends javax.swing.JDialog {
         jLabel3.setText("TOTAL LECTURERS");
 
         txtTotalLecturers.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtTotalLecturers.setText("100");
+        txtTotalLecturers.setText("0");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -265,7 +283,7 @@ public class AdminDashboard extends javax.swing.JDialog {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(txtTotalLecturers, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -294,22 +312,24 @@ public class AdminDashboard extends javax.swing.JDialog {
         jLabel4.setText("TOTAL SUBJECTS");
 
         txtTotalSubjects.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtTotalSubjects.setText("100");
+        txtTotalSubjects.setText("0");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtTotalSubjects, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel5Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jLabel4))
-                        .addGroup(jPanel5Layout.createSequentialGroup()
-                            .addGap(32, 32, 32)
-                            .addComponent(lblSubjectImg, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel4))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(lblSubjectImg, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(txtTotalSubjects, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -323,87 +343,13 @@ public class AdminDashboard extends javax.swing.JDialog {
                 .addComponent(txtTotalSubjects))
         );
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setText("STUDENTS PASSING");
-
-        txtTotalPassed.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtTotalPassed.setText("100");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(lblPassedImg, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(txtTotalPassed, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(lblPassedImg, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtTotalPassed)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setText("STUDENTS FAILING");
-
-        txtTotalFailed.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtTotalFailed.setText("100");
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(lblFailedImg, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(txtTotalFailed, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(lblFailedImg, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtTotalFailed)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setText("GRADES RECORDED");
 
         txtGradesRecorded.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtGradesRecorded.setText("100");
+        txtGradesRecorded.setText("0");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -431,7 +377,7 @@ public class AdminDashboard extends javax.swing.JDialog {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtGradesRecorded)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnReport1.setBackground(new java.awt.Color(204, 204, 0));
@@ -453,17 +399,13 @@ public class AdminDashboard extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                         .addComponent(btnLogout))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(61, 61, 61)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
-                        .addGap(142, 142, 142)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -508,13 +450,9 @@ public class AdminDashboard extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(33, 33, 33)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(11, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -583,21 +521,15 @@ public class AdminDashboard extends javax.swing.JDialog {
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cmbRegistrationOptions;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JLabel lblFailedImg;
     private javax.swing.JLabel lblLecturerImg;
-    private javax.swing.JLabel lblPassedImg;
     private javax.swing.JLabel lblRecordedImg;
     private javax.swing.JLabel lblStudentImg;
     private javax.swing.JLabel lblSubjectImg;
@@ -605,9 +537,7 @@ public class AdminDashboard extends javax.swing.JDialog {
     private javax.swing.JLabel lblUserImg;
     private javax.swing.JLabel txtGradesRecorded;
     private javax.swing.JTextField txtSearchQuery;
-    private javax.swing.JLabel txtTotalFailed;
     private javax.swing.JLabel txtTotalLecturers;
-    private javax.swing.JLabel txtTotalPassed;
     private javax.swing.JLabel txtTotalStudents;
     private javax.swing.JLabel txtTotalSubjects;
     // End of variables declaration//GEN-END:variables

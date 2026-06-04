@@ -57,7 +57,7 @@ public class LecturerDashboard extends javax.swing.JDialog {
                     result.next();
                     txtTotalSubjects.setText(Integer.toString(result.getInt("total_subjects")));
                     
-                    pstmt=con.prepareStatement("select count(*) as total_students from student_subjects where subject_name in (select subject_name from subjects where lecturer_username=?);");
+                    pstmt=con.prepareStatement("select count(distinct student_username) as total_students from grades where lecturer_username=?;");
                     pstmt.setString(1,userInfo.getString("username"));
                     result=pstmt.executeQuery();
                     result.next();
@@ -105,7 +105,7 @@ public class LecturerDashboard extends javax.swing.JDialog {
                             result.getInt("credit_hours"),
                             result.getString("student_username"),
                             result.getDouble("marks"),
-                            result.getString("grade_letter")==null?"E":result.getString("grade_letter"),
+                            result.getString("grade_letter"),
                             result.getDouble("GPA")
                         });
                     
@@ -447,7 +447,7 @@ public class LecturerDashboard extends javax.swing.JDialog {
                 result.getInt("credit_hours"),
                 result.getString("student_username"),
                 result.getDouble("marks"),
-                result.getString("grade_letter")==null?"E":result.getString("grade_letter"),
+                result.getString("grade_letter"),
                 result.getDouble("GPA")
             });
         }

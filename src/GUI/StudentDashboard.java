@@ -52,6 +52,13 @@ public class StudentDashboard extends javax.swing.JDialog {
                     }
                     lblUserFullname.setText(userInfo.getString("fullname"));
                     
+                    con=DBConnection.createConnection();
+                    pstmt=con.prepareStatement("select count(*) as total_subjects from student_subjects where student_username=?;");
+                    pstmt.setString(1,userInfo.getString("username"));
+                    result=pstmt.executeQuery();
+                    result.next();
+                    txtTotalSubjects.setText(Integer.toString(result.getInt("total_subjects")));
+                    
                     
                     model.setRowCount(0);
                     model.setColumnIdentifiers(new String[]{
@@ -70,17 +77,24 @@ public class StudentDashboard extends javax.swing.JDialog {
                     
                     tblGrades.setModel(model);
                     
+                    double totalQualityPoints=0,
+                           totalCredits=0;
+                    
                     while(result.next())
+                    {
                         model.addRow(new Object[]{
                             result.getString("subject_name"),
                             result.getInt("credit_hours"),
                             result.getString("lecturer_username"),
                             result.getDouble("marks"),
-                            result.getString("grade_letter")==null?"E":result.getString("grade_letter"),
+                            result.getString("grade_letter"),
                             result.getDouble("GPA")
                         });
-   
+                        totalQualityPoints+=(result.getInt("credit_hours")*result.getDouble("GPA"));
+                        totalCredits+=result.getInt("credit_hours");
+                    }
                     
+                    txtOverallGpa.setText(Double.toString(totalQualityPoints/totalCredits));
                     
                     tblGrades.getTableHeader().setResizingAllowed(false);
                     tblGrades.getColumnModel().getColumn(0).setPreferredWidth(100);
@@ -157,7 +171,7 @@ public class StudentDashboard extends javax.swing.JDialog {
         jPanel4 = new javax.swing.JPanel();
         lblGradeImg = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtTotalStudents = new javax.swing.JLabel();
+        txtOverallGpa = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblGrades = new javax.swing.JTable();
         btnExportMarks = new javax.swing.JButton();
@@ -185,7 +199,7 @@ public class StudentDashboard extends javax.swing.JDialog {
         jLabel1.setText("TOTAL SUBJECTS");
 
         txtTotalSubjects.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtTotalSubjects.setText("100");
+        txtTotalSubjects.setText("0");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -221,8 +235,8 @@ public class StudentDashboard extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("MY GPA");
 
-        txtTotalStudents.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtTotalStudents.setText("100");
+        txtOverallGpa.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtOverallGpa.setText("0");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -230,7 +244,7 @@ public class StudentDashboard extends javax.swing.JDialog {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(txtTotalStudents, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtOverallGpa, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(42, 42, 42))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(45, 45, 45)
@@ -249,26 +263,26 @@ public class StudentDashboard extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtTotalStudents)
+                .addComponent(txtOverallGpa)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tblGrades.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "SUBJECT", "LECTURER", "NUMERICAL GRADE", "LETTER GRADE"
+                "SUBJECT", "CREDIT HOURS", "LECTURER", "MARKS", "GRADE LETTER", "GPA"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -286,6 +300,8 @@ public class StudentDashboard extends javax.swing.JDialog {
             tblGrades.getColumnModel().getColumn(1).setResizable(false);
             tblGrades.getColumnModel().getColumn(2).setResizable(false);
             tblGrades.getColumnModel().getColumn(3).setResizable(false);
+            tblGrades.getColumnModel().getColumn(4).setResizable(false);
+            tblGrades.getColumnModel().getColumn(5).setResizable(false);
         }
 
         btnExportMarks.setBackground(new java.awt.Color(204, 204, 204));
@@ -462,7 +478,7 @@ public class StudentDashboard extends javax.swing.JDialog {
     private javax.swing.JLabel lblUserFullname;
     private javax.swing.JLabel lblUserImg;
     private javax.swing.JTable tblGrades;
-    private javax.swing.JLabel txtTotalStudents;
+    private javax.swing.JLabel txtOverallGpa;
     private javax.swing.JLabel txtTotalSubjects;
     // End of variables declaration//GEN-END:variables
 }

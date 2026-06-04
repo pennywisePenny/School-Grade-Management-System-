@@ -201,7 +201,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="14" style="1"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="100"/>
+                    <Property name="text" type="java.lang.String" value="0"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -218,7 +218,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          <Component id="txtTotalStudents" min="-2" pref="56" max="-2" attributes="0"/>
+                          <Component id="txtOverallGpa" min="-2" pref="56" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -242,7 +242,7 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jLabel2" min="-2" pref="20" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="txtTotalStudents" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtOverallGpa" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -259,12 +259,12 @@
                     <Property name="text" type="java.lang.String" value="MY GPA"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="txtTotalStudents">
+                <Component class="javax.swing.JLabel" name="txtOverallGpa">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="14" style="1"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="100"/>
+                    <Property name="text" type="java.lang.String" value="0"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -279,15 +279,27 @@
                 <Component class="javax.swing.JTable" name="tblGrades">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="4" rowCount="4">
+                      <Table columnCount="6" rowCount="4">
                         <Column editable="false" title="SUBJECT" type="java.lang.String"/>
+                        <Column editable="false" title="CREDIT HOURS" type="java.lang.Integer"/>
                         <Column editable="false" title="LECTURER" type="java.lang.String"/>
-                        <Column editable="false" title="NUMERICAL GRADE" type="java.lang.Integer"/>
-                        <Column editable="false" title="LETTER GRADE" type="java.lang.String"/>
+                        <Column editable="false" title="MARKS" type="java.lang.Double"/>
+                        <Column editable="false" title="GRADE LETTER" type="java.lang.String"/>
+                        <Column editable="false" title="GPA" type="java.lang.Double"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="0">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
                           <Title/>
                           <Editor/>

@@ -108,9 +108,9 @@ public class DBConnection
                                 subject_name        VARCHAR(50) NOT NULL,                                
                                 credit_hours        INT NOT NULL,
                                 student_username    VARCHAR(50) NOT NULL,
-                                marks               DOUBLE,
-                                grade_letter        VARCHAR(3),
-                                GPA                 DOUBLE,
+                                marks               DOUBLE DEFAULT 0.0,
+                                grade_letter        VARCHAR(3) DEFAULT "E",
+                                GPA                 DOUBLE DEFAULT 0.0,
                                 lecturer_username   VARCHAR(50) NOT NULL
                            );
                            """);
