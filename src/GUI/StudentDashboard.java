@@ -94,7 +94,7 @@ public class StudentDashboard extends javax.swing.JDialog {
                         totalCredits+=result.getInt("credit_hours");
                     }
                     
-                    txtOverallGpa.setText(Double.toString(totalQualityPoints/totalCredits));
+                    txtOverallGpa.setText(String.format("%.2f",totalQualityPoints/totalCredits));
                     
                     tblGrades.getTableHeader().setResizingAllowed(false);
                     tblGrades.getColumnModel().getColumn(0).setPreferredWidth(100);
