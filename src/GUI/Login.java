@@ -8,6 +8,8 @@ import java.awt.*;
 import Main.DBConnection;
 import java.sql.*;
 
+import com.mysql.cj.jdbc.exceptions.CommunicationsException;
+
 public class Login extends JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
@@ -21,13 +23,28 @@ public class Login extends JFrame {
         Image.SCALE_SMOOTH
         );
         lblUserImg.setIcon(new ImageIcon(scaledUserImage));
-        try
-        {
-            DBConnection.createDB();
-        }
-        catch(Exception e){
-            System.out.println(e);
-        }
+        
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowOpened(java.awt.event.WindowEvent e) {
+                try
+                {
+                    DBConnection.createDB();
+                }
+                catch(CommunicationsException  err)
+                {
+                    System.out.println(err);
+                    JOptionPane.showMessageDialog(rootPane, "Server Inaccesible: Database server not started", "ERROR", 0);
+                }
+                catch(Exception err)
+                {
+                    System.out.println(err);
+                    // for loop
+                    JOptionPane.showMessageDialog(rootPane, "Please input your database login credentials", "ERROR", 0);
+                    new DBLogin(Login.this, rootPaneCheckingEnabled).setVisible(true);
+                }
+            }
+        });        
     }
 
     @SuppressWarnings("unchecked")
@@ -201,6 +218,11 @@ public class Login extends JFrame {
                     txtPassword.setText("");
                 }
                 con.close();
+            }
+            catch(SQLNonTransientConnectionException e)
+            {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(rootPane, "Server Inaccesible: Database server not started", "ERROR", 0);
             }
             catch(Exception e)
             {
