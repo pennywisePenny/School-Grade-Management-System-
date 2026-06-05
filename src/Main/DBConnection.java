@@ -7,6 +7,9 @@ package Main;
 import java.io.File;
 import java.sql.*;
 import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.*;
 
 public class DBConnection 
@@ -22,6 +25,24 @@ public class DBConnection
 
         return con;
 
+    }
+    
+    private static String status="";
+    
+    public static void setDBCredentials(String username,String password,String DBName) throws Exception
+    {
+        File xmlFile=new File("src/XML/DB.xml");
+        Document doc= DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlFile);
+        doc.getDocumentElement().normalize();
+        
+        doc.getElementsByTagName("user").item(0).setTextContent(username);
+        doc.getElementsByTagName("password").item(0).setTextContent(password);
+        doc.getElementsByTagName("DB").item(0).setTextContent(DBName);
+        
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        
+        transformer.setOutputProperty(OutputKeys.INDENT,"yes");
+        transformer.transform(new DOMSource(doc), new StreamResult(xmlFile));
     }
     
     public static void createDB() throws Exception

@@ -12,61 +12,6 @@ public class Login extends JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
     
-    class LoginThread extends Thread {
-        
-        @Override
-        public void run() 
-        {
-            if( !txtUsername.getText().trim().isEmpty() && !txtPassword.getText().trim().isEmpty() )
-                try 
-                {
-                    Connection con=DBConnection.createConnection();
-                    PreparedStatement pstmt=con.prepareStatement("select * from users where username = ? AND password = ?;");
-                    pstmt.setString(1,txtUsername.getText().trim());
-                    pstmt.setString(2,txtPassword.getText().trim());
-                    ResultSet result=pstmt.executeQuery();
-                    
-                    if(result.next())
-                    {
-                        switch(result.getString("role"))
-                        {
-                            case "admin":
-                                AdminDashboard.getUserInfo(result);
-                                AdminDashboard Admin=new AdminDashboard(Login.this, rootPaneCheckingEnabled);
-                                Admin.setVisible(true);
-                            break;
-                        
-                            case "student":
-                                StudentDashboard.getUserInfo(result);
-                                StudentDashboard Student=new StudentDashboard(Login.this, rootPaneCheckingEnabled);
-                                Student.setVisible(true);
-                            break;
-                        
-                            case "lecturer":
-                                LecturerDashboard.getUserInfo(result);
-                                LecturerDashboard Lecturer=new LecturerDashboard(Login.this, rootPaneCheckingEnabled);
-                                Lecturer.setVisible(true);
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        JOptionPane.showMessageDialog(rootPane, "Invalid Password or Username", "ERROR", 0);
-                        txtUsername.setText("");
-                        txtPassword.setText("");
-                    }
-                }
-                catch(Exception e)
-                {
-                    System.out.println(e);
-                    JOptionPane.showMessageDialog(rootPane, "Server Inaccesible", "ERROR", 0);
-                
-                }
-            else
-                JOptionPane.showMessageDialog(rootPane, "PLEASE PROVIDE BOTH A USERNAME AND A PASSWORD", "INVALID INPUTS", 2);
-        }
-    }
-
     public Login() {
         initComponents();  
         ImageIcon userImg = new ImageIcon("src/assets/logo6.jpg");
@@ -76,7 +21,8 @@ public class Login extends JFrame {
         Image.SCALE_SMOOTH
         );
         lblUserImg.setIcon(new ImageIcon(scaledUserImage));
-        try{
+        try
+        {
             DBConnection.createDB();
         }
         catch(Exception e){
@@ -216,8 +162,54 @@ public class Login extends JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
 
-        LoginThread login=new LoginThread();
-        login.start();
+        if( !txtUsername.getText().trim().isEmpty() && !txtPassword.getText().trim().isEmpty() )
+            try 
+            {
+                Connection con=DBConnection.createConnection();
+                PreparedStatement pstmt=con.prepareStatement("select * from users where username = ? AND password = ?;");
+                pstmt.setString(1,txtUsername.getText().trim());
+                pstmt.setString(2,txtPassword.getText().trim());
+                ResultSet result=pstmt.executeQuery();
+                    
+                if(result.next())
+                {
+                    switch(result.getString("role"))
+                    {
+                        case "admin":
+                            AdminDashboard.getUserInfo(result);
+                            AdminDashboard Admin=new AdminDashboard(this, rootPaneCheckingEnabled);
+                            Admin.setVisible(true);
+                        break;
+                        
+                        case "student":
+                            StudentDashboard.getUserInfo(result);
+                            StudentDashboard Student=new StudentDashboard(this, rootPaneCheckingEnabled);
+                            Student.setVisible(true);
+                        break;
+                        
+                        case "lecturer":
+                            LecturerDashboard.getUserInfo(result);
+                            LecturerDashboard Lecturer=new LecturerDashboard(this, rootPaneCheckingEnabled);
+                            Lecturer.setVisible(true);
+                        break;
+                    }
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(rootPane, "Invalid Password or Username", "ERROR", 0);
+                    txtUsername.setText("");
+                    txtPassword.setText("");
+                }
+                con.close();
+            }
+            catch(Exception e)
+            {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(rootPane, "Server Inaccesible", "ERROR", 0);
+                
+            }
+        else
+            JOptionPane.showMessageDialog(rootPane, "PLEASE PROVIDE BOTH A USERNAME AND A PASSWORD", "INVALID INPUTS", 2);
     }//GEN-LAST:event_btnLoginActionPerformed
 
     public static void main(String args[]) {

@@ -212,7 +212,7 @@ public class LecturerDashboard extends javax.swing.JDialog {
         jLabel1.setText("MY SUBJECTS");
 
         txtTotalSubjects.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtTotalSubjects.setText("100");
+        txtTotalSubjects.setText("0");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -249,7 +249,7 @@ public class LecturerDashboard extends javax.swing.JDialog {
         jLabel2.setText("MY TOTAL STUDENTS");
 
         txtTotalStudents.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtTotalStudents.setText("100");
+        txtTotalStudents.setText("0");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
