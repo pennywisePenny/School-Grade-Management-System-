@@ -45,11 +45,9 @@ public class StudentDashboard extends javax.swing.JDialog {
                     Connection con=DBConnection.createConnection();
                     PreparedStatement pstmt;
                     ResultSet result;
-                    while(userInfo.getString("fullname")==null)
-                    {
-                        UserData userName = new UserData(StudentDashboard.this, rootPaneCheckingEnabled);
-                        userName.setVisible(true);
-                    }
+                    if(userInfo.getString("fullname")==null)
+                        new UserData(StudentDashboard.this, rootPaneCheckingEnabled).setVisible(true);
+                    
                     lblUserFullname.setText(userInfo.getString("fullname"));
                     
                     con=DBConnection.createConnection();

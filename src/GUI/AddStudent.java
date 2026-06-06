@@ -28,7 +28,7 @@ public class AddStudent extends javax.swing.JDialog {
                     while(result.next())
                         model.addElement(result.getString("subject_name"));
                     lstSubjects.setModel(model);
-
+                    con.close();
                 }
                 catch(Exception s)
                 {
@@ -201,7 +201,7 @@ public class AddStudent extends javax.swing.JDialog {
                             
                         }
 
-                        
+                        con.close();
                         
                         JOptionPane.showMessageDialog(rootPane, "User Successfully Added", "STUDENT REGISTRATION SUCCESSFULL", JOptionPane.PLAIN_MESSAGE);
                     }

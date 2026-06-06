@@ -43,19 +43,6 @@ public class DBConnection
         transformer.transform(new DOMSource(doc), new StreamResult(xmlFile));
     }
     
-    public static void setDBName() throws Exception
-    {
-        File xmlFile=new File("src/XML/DB.xml");
-        Document doc= DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlFile);
-        doc.getDocumentElement().normalize();
-        
-        doc.getElementsByTagName("DB").item(0).setTextContent(DBName);
-    
-        Transformer transformer = TransformerFactory.newInstance().newTransformer();
-        
-        transformer.setOutputProperty(OutputKeys.INDENT,"yes");
-        transformer.transform(new DOMSource(doc), new StreamResult(xmlFile));
-    }
     
     public static void createDB() throws Exception
     {
@@ -151,6 +138,8 @@ public class DBConnection
                                 lecturer_username   VARCHAR(50) NOT NULL
                            );
                            """);
+        
+        con.close();
                 
     }
     

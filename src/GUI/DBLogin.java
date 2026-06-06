@@ -5,15 +5,23 @@
 package GUI;
 
 import Main.DBConnection;
+import java.sql.SQLNonTransientConnectionException;
+import javax.swing.JOptionPane;
 
 public class DBLogin extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DBLogin.class.getName());
-
-
+    
     public DBLogin(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                System.exit(0);
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -107,11 +115,24 @@ public class DBLogin extends javax.swing.JDialog {
     private void btnSubmitCredentialsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitCredentialsActionPerformed
         try
         {
-            DBConnection.setDBUSerCredentials(txtUsername.getText().trim(), txtPassword.getText().trim());
+            if( !txtUsername.getText().trim().isEmpty() && !txtPassword.getText().trim().isEmpty() )
+            {
+                DBConnection.setDBUSerCredentials(txtUsername.getText().trim(), txtPassword.getText().trim());
+                DBConnection.createDB();
+                this.dispose();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(rootPane, "PLEASE PROVIDE BOTH A USERNAME AND A PASSWORD", "INVALID INPUTS", JOptionPane.WARNING_MESSAGE);
+                txtUsername.setText("");
+                txtPassword.setText("");
+            }
         }
+
         catch(Exception e)
         {
-        
+            System.out.println(e);
+            JOptionPane.showMessageDialog(rootPane, "Server Inaccesible: Database server not started", "ERROR", 0);
         }
     }//GEN-LAST:event_btnSubmitCredentialsActionPerformed
 

@@ -121,6 +121,7 @@ public class AddAdmin extends javax.swing.JDialog {
                 pstmt.setString(1,txtUsername.getText().trim());
                 pstmt.setString(2,txtPassword.getText().trim());
                 pstmt.executeUpdate();
+                con.close();
                 
                 JOptionPane.showMessageDialog(rootPane, "User Successfully Added", "SUCCESS", JOptionPane.PLAIN_MESSAGE);
             }

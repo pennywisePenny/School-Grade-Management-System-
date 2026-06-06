@@ -44,11 +44,9 @@ public class LecturerDashboard extends javax.swing.JDialog {
                 UserData.getUserInfo(userInfo);
                 try
                 {
-                    while(userInfo.getString("fullname")==null)
-                    {
-                        UserData userName = new UserData(LecturerDashboard.this, rootPaneCheckingEnabled);
-                        userName.setVisible(true);
-                    }
+                    if(userInfo.getString("fullname")==null)
+                       new UserData(LecturerDashboard.this, rootPaneCheckingEnabled).setVisible(true);
+
                     lblUserFullname.setText(userInfo.getString("fullname"));
                     Connection con=DBConnection.createConnection();
                     PreparedStatement pstmt=con.prepareStatement("select count(*) as total_subjects from subjects where lecturer_username=?;");
@@ -134,6 +132,7 @@ public class LecturerDashboard extends javax.swing.JDialog {
                     );
                     
                     tblMarks.setRowHeight(25);
+                    con.close();
                 }
                catch(Exception s)
                {
@@ -424,7 +423,7 @@ public class LecturerDashboard extends javax.swing.JDialog {
             ResultSet result;
             Connection con=DBConnection.createConnection();
             PreparedStatement pstmt;
-        
+            
             switch(cmbSubjects.getSelectedItem().toString())
             {
                 case "ALL":
@@ -450,6 +449,8 @@ public class LecturerDashboard extends javax.swing.JDialog {
                 result.getString("grade_letter"),
                 result.getDouble("GPA")
             });
+            
+            con.close();
         }
         catch(Exception e)
         {
@@ -557,6 +558,7 @@ public class LecturerDashboard extends javax.swing.JDialog {
                         pstmt.setString(2,subjectName);
                         pstmt.setString(3,studentName);
                         pstmt.executeUpdate();
+                        con.close();
                     }
                     else
                     {
@@ -566,6 +568,7 @@ public class LecturerDashboard extends javax.swing.JDialog {
                 }
                 else
                     model.setValueAt(0.0,row,3);
+                
             }
             catch(NumberFormatException e)
             {

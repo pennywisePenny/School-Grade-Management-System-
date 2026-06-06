@@ -73,10 +73,15 @@ public class AdminDashboard extends javax.swing.JDialog {
                 {
                     break;
                 }
+                catch(SQLNonTransientConnectionException e)
+                {
+                    System.out.println(e);
+                    JOptionPane.showMessageDialog(rootPane, "Server Inaccesible: Database server not started", "ERROR", 0);
+                }
                 catch(Exception e)
                 {
                     System.out.println(e);
-                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(rootPane, "Invalid Database Selected", "ERROR", 0); 
                 }
             }
         
@@ -94,11 +99,9 @@ public class AdminDashboard extends javax.swing.JDialog {
                 UserData.getUserInfo(userInfo);
                 try
                 {
-                    while(userInfo.getString("fullname")==null)
-                    {
-                        UserData userName = new UserData(AdminDashboard.this, rootPaneCheckingEnabled);
-                        userName.setVisible(true);
-                    }
+                    if(userInfo.getString("fullname")==null)
+                        new UserData(AdminDashboard.this, rootPaneCheckingEnabled).setVisible(true);
+
                     lblUserFullname.setText(userInfo.getString("fullname"));
                }
                catch(Exception s)

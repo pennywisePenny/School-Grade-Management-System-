@@ -38,9 +38,7 @@ public class Login extends JFrame {
                 }
                 catch(Exception err)
                 {
-                    System.out.println(err);
-                    // for loop
-                    JOptionPane.showMessageDialog(rootPane, "Please input your database login credentials", "ERROR", 0);
+                    JOptionPane.showMessageDialog(rootPane, "Please input your Database login credentials", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
                     new DBLogin(Login.this, rootPaneCheckingEnabled).setVisible(true);
                 }
             }
@@ -227,8 +225,7 @@ public class Login extends JFrame {
             catch(Exception e)
             {
                 System.out.println(e);
-                JOptionPane.showMessageDialog(rootPane, "Server Inaccesible", "ERROR", 0);
-                
+                JOptionPane.showMessageDialog(rootPane, "Invalid Database Selected", "ERROR", 0); 
             }
         else
             JOptionPane.showMessageDialog(rootPane, "PLEASE PROVIDE BOTH A USERNAME AND A PASSWORD", "INVALID INPUTS", 2);
