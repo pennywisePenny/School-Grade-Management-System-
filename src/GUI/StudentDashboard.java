@@ -421,12 +421,73 @@ public class StudentDashboard extends javax.swing.JDialog {
         }
     }
     
+    public void exportTableToCSV() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setSelectedFile(new File("export.csv"));
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("CSV Files", "csv"));
+ 
+        int userChoice = fileChooser.showSaveDialog(null);
+ 
+        if (userChoice == JFileChooser.APPROVE_OPTION) 
+        {
+            File file = fileChooser.getSelectedFile();
+ 
+            if (!file.getName().endsWith(".csv")) 
+            {
+                file = new File(file.getAbsolutePath() + ".csv");
+            }
+ 
+            try (PrintWriter pw = new PrintWriter(new FileWriter(file))) 
+            {
+ 
+                for (int col = 0; col < model.getColumnCount(); col++) 
+                {
+                    pw.print(escapeCSV(model.getColumnName(col)));
+                    if (col < model.getColumnCount() - 1) pw.print(",");
+                }
+                pw.println();
+ 
+            for (int row = 0; row < model.getRowCount(); row++) 
+            {
+                for (int col = 0; col < model.getColumnCount(); col++) 
+                {
+                    Object value = model.getValueAt(row, col);
+                    pw.print(escapeCSV(value != null ? value.toString() : ""));
+                    if (col < model.getColumnCount() - 1) pw.print(",");
+                }
+                pw.println();
+            }
+ 
+            JOptionPane.showMessageDialog(null, "Exported successfully:\n" + file.getAbsolutePath());
+ 
+        } 
+        catch (IOException e) 
+        {
+            JOptionPane.showMessageDialog(null, "Export failed: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+}
+ 
+// Escape values that contain commas, quotes, or newlines
+    private String escapeCSV(String value) 
+    {
+        if (value.contains(",") || value.contains("\"") || value.contains("\n")) 
+        {
+            value = value.replace("\"", "\"\"");
+            return "\"" + value + "\"";
+        }
+        return value;
+    }
+    
+    
+    
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnExportMarksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportMarksActionPerformed
-        try{
+        /*try{
         JFileChooser chooser=new JFileChooser();
         if(chooser.showSaveDialog(this)==JFileChooser.APPROVE_OPTION)
         {
@@ -442,7 +503,9 @@ public class StudentDashboard extends javax.swing.JDialog {
         catch(Exception e)
         {
             e.printStackTrace();
-        }
+        }*/
+        
+        exportTableToCSV();
     }//GEN-LAST:event_btnExportMarksActionPerformed
 
     public static void main(String args[]) {

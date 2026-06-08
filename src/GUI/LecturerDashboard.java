@@ -564,6 +564,8 @@ public class LecturerDashboard extends javax.swing.JDialog {
                     {
                         JOptionPane.showMessageDialog(rootPane, "Please Input a valid number between 0 and 100", "INVALID RANGE", JOptionPane.WARNING_MESSAGE);
                         model.setValueAt(0.0,row,3);
+                        model.setValueAt("E", row, 4);
+                        model.setValueAt(0.0, row, 5);
                     }
                 }
                 else
